@@ -1,0 +1,139 @@
+{
+  "id": "felted-three-player-flop-seed",
+  "kind": "local_development_seed",
+  "currency": "USD",
+  "moneyUnit": "integer_cents",
+  "note": "A deterministic starting state for a UI action demo. This is not a complete poker engine and contains no production network contract.",
+  "capacity": 3,
+  "variant": "NLH",
+  "street": "flop",
+  "smallBlindCents": 10,
+  "bigBlindCents": 20,
+  "initialTotalChipsCents": 30000,
+  "dealerId": "hero",
+  "smallBlindId": "jules",
+  "bigBlindId": "rune",
+  "clockwiseSeatOrder": [
+    "hero",
+    "jules",
+    "rune"
+  ],
+  "heroId": "hero",
+  "actingPlayerId": "hero",
+  "board": [
+    "Qh",
+    "8s",
+    "5d"
+  ],
+  "heroCards": [
+    "8h",
+    "8c"
+  ],
+  "potBeforeStreetCents": 60,
+  "potCents": 520,
+  "potIncludesCurrentStreetBets": true,
+  "currentBetToMatchCents": 460,
+  "lastFullRaiseIncrementCents": 460,
+  "heroAmountToCallCents": 460,
+  "heroMinimumRaiseToCents": 920,
+  "heroMaximumRaiseToCents": 9980,
+  "seats": [
+    {
+      "id": "hero",
+      "name": "You",
+      "avatar": "black-cat-knit",
+      "stackCents": 9980,
+      "streetContributionCents": 0,
+      "handContributionCents": 20,
+      "status": "active"
+    },
+    {
+      "id": "jules",
+      "name": "Jules",
+      "avatar": "helmet",
+      "stackCents": 9980,
+      "streetContributionCents": 0,
+      "handContributionCents": 20,
+      "status": "active",
+      "lastAction": "check"
+    },
+    {
+      "id": "rune",
+      "name": "Rune",
+      "avatar": "fox-glasses",
+      "stackCents": 9520,
+      "streetContributionCents": 460,
+      "handContributionCents": 480,
+      "status": "active",
+      "lastAction": "bet"
+    }
+  ],
+  "history": [
+    {
+      "street": "preflop",
+      "player": "jules",
+      "action": "post_small_blind",
+      "amountAddedCents": 10
+    },
+    {
+      "street": "preflop",
+      "player": "rune",
+      "action": "post_big_blind",
+      "amountAddedCents": 20
+    },
+    {
+      "street": "preflop",
+      "player": "hero",
+      "action": "call",
+      "amountAddedCents": 20
+    },
+    {
+      "street": "preflop",
+      "player": "jules",
+      "action": "call",
+      "amountAddedCents": 10
+    },
+    {
+      "street": "preflop",
+      "player": "rune",
+      "action": "check",
+      "amountAddedCents": 0
+    },
+    {
+      "street": "flop",
+      "player": "jules",
+      "action": "check",
+      "amountAddedCents": 0
+    },
+    {
+      "street": "flop",
+      "player": "rune",
+      "action": "bet",
+      "amountAddedCents": 460
+    }
+  ],
+  "callBranchExpectations": {
+    "afterHeroCalls": {
+      "heroStackCents": 9520,
+      "potCents": 980,
+      "nextActorId": "jules"
+    },
+    "afterJulesCalls": {
+      "stacksCents": {
+        "hero": 9520,
+        "jules": 9520,
+        "rune": 9520
+      },
+      "potCents": 1440,
+      "streetComplete": true
+    }
+  },
+  "raiseBranchExpectations": {
+    "heroRaiseToCents": 920,
+    "heroAdditionalCommitmentCents": 920,
+    "heroRemainingStackCents": 9060,
+    "potAfterHeroRaiseCents": 1440,
+    "nextActorId": "jules"
+  },
+  "privacy": "Opponent hole cards remain unavailable to the UI unless revealed by valid state. Do not fabricate hidden hands in a production client."
+}

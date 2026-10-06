@@ -1,0 +1,19 @@
+{
+  "verified_at": "2026-10-06T15:57:24.213336-07:00",
+  "restored_source_matches_delivered_bundle": true,
+  "dependencies_retained": true,
+  "development_server_restarted": true,
+  "typecheck": "passed",
+  "unit_tests": {
+    "passed": 10,
+    "failed": 0,
+    "skipped": 0
+  },
+  "browser_review": {
+    "passed_groups": 14,
+    "errors": []
+  },
+  "web_export": "passed",
+  "ios_javascript_export": "passed",
+  "ios_device_or_simulator_tested": false
+}

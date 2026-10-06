@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/ahatem/IoskeleyMono",
+  "release": "v2.1.0",
+  "release_url": "https://github.com/ahatem/IoskeleyMono/releases/tag/v2.1.0",
+  "archive_url": "https://github.com/ahatem/IoskeleyMono/releases/download/v2.1.0/IoskeleyMono.zip",
+  "original_paths": [
+    "Normal/Unhinted/IoskeleyMono-Regular.ttf",
+    "Normal/Unhinted/IoskeleyMono-Medium.ttf",
+    "Normal/Unhinted/IoskeleyMono-SemiBold.ttf"
+  ]
+}

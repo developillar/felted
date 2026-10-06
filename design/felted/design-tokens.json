@@ -1,0 +1,167 @@
+{
+  "name": "Felted",
+  "version": "1.0",
+  "status": "proposed starting values; validate in implementation",
+  "units": {
+    "layout": "logical points",
+    "duration": "milliseconds",
+    "color": "sRGB hex"
+  },
+  "color": {
+    "canvas": "#050507",
+    "surface": "#14141D",
+    "surfaceRaised": "#1D1D28",
+    "borderSubtle": "#353343",
+    "borderStrong": "#817C99",
+    "textPrimary": "#F4F3F7",
+    "textSecondary": "#B9B7C8",
+    "textMuted": "#9693A8",
+    "accent": "#C5B8FF",
+    "textOnAccent": "#111016",
+    "cardFace": "#F5F0E6",
+    "heart": "#BE273B",
+    "spade": "#20212A",
+    "diamond": "#245EA8",
+    "club": "#176B50",
+    "positive": "#8CDEBD",
+    "warning": "#F2BA73",
+    "error": "#FF969C"
+  },
+  "spacing": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    40
+  ],
+  "radius": {
+    "panel": 24,
+    "component": 20,
+    "card": 7,
+    "pill": "half of component height"
+  },
+  "stroke": {
+    "hairline": 1,
+    "activeTurn": 2
+  },
+  "type": {
+    "fontFiles": {
+      "regular": "assets/fonts/IoskeleyMono-Regular.ttf",
+      "medium": "assets/fonts/IoskeleyMono-Medium.ttf",
+      "semibold": "assets/fonts/IoskeleyMono-SemiBold.ttf"
+    },
+    "postScriptNames": {
+      "regular": "Ioskeley-Mono",
+      "medium": "Ioskeley-Mono-Medium",
+      "semibold": "Ioskeley-Mono-Semibold"
+    },
+    "wordmark": {
+      "family": "Ioskeley Mono",
+      "weight": 500,
+      "size": 14,
+      "lineHeight": 20,
+      "tracking": 4
+    },
+    "screenTitle": {
+      "family": "system",
+      "weight": 600,
+      "size": 30,
+      "lineHeight": 36
+    },
+    "pot": {
+      "family": "Ioskeley Mono",
+      "weight": 500,
+      "size": 28,
+      "lineHeight": 34
+    },
+    "action": {
+      "family": "Ioskeley Mono",
+      "weight": 500,
+      "size": 17,
+      "lineHeight": 22
+    },
+    "seat": {
+      "family": "Ioskeley Mono",
+      "weight": 400,
+      "size": 12,
+      "lineHeight": 16
+    },
+    "body": {
+      "family": "system",
+      "weight": 400,
+      "size": 16,
+      "lineHeight": 22
+    },
+    "metadata": {
+      "family": "Ioskeley Mono",
+      "weight": 400,
+      "size": 12,
+      "lineHeight": 16
+    }
+  },
+  "layout": {
+    "horizontalPadding": 16,
+    "tableOuterPadding": 12,
+    "minTouchTarget": 44,
+    "headerHeight": 52,
+    "actionHeight": 60,
+    "compactActionHeight": 52,
+    "heroDockHeightRange": [
+      96,
+      112
+    ],
+    "avatarSizeRange": [
+      44,
+      56
+    ],
+    "boardCardWidthDenseRange": [
+      34,
+      40
+    ],
+    "boardGap": 4,
+    "heroCardWidthRange": [
+      48,
+      58
+    ],
+    "heroCrestSizeRange": [
+      16,
+      20
+    ]
+  },
+  "motion": {
+    "pressIn": 80,
+    "pressOut": 120,
+    "sheetRange": [
+      240,
+      300
+    ],
+    "cardRange": [
+      180,
+      220
+    ],
+    "dealStaggerRange": [
+      60,
+      80
+    ],
+    "chipsRange": [
+      220,
+      300
+    ],
+    "achievementEnterRange": [
+      700,
+      1000
+    ]
+  },
+  "accessibility": {
+    "respectTextScaling": true,
+    "reducedMotion": "short opacity changes; no orbit, parallax or traveling chips",
+    "numericLigatures": false
+  },
+  "notes": [
+    "Screen pixels are not logical points.",
+    "Colors and timing are authored starting values, not extracted Opal tokens.",
+    "Timer duration is intentionally not specified."
+  ]
+}

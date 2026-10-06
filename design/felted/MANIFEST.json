@@ -1,0 +1,98 @@
+{
+  "name": "Felted Codex Handoff",
+  "version": "1.0",
+  "created": "2026-10-06",
+  "contents": "Documentation, design data, fonts and reference images; no app implementation",
+  "files": [
+    {
+      "path": "ACCEPTANCE.md",
+      "bytes": 4023,
+      "sha256": "b15e5497a5da72e7bbe14343912d8812d0a625c6f3cdb8fb60bd6ad37d91a7fd"
+    },
+    {
+      "path": "ASSET_BRIEF.md",
+      "bytes": 6067,
+      "sha256": "05c9a98a0ddbb41cb96146289ce2124558b73df52430a8af7a6e92c3141a240d"
+    },
+    {
+      "path": "BUILD_PLAN.md",
+      "bytes": 5345,
+      "sha256": "707317c4c646f12174531716f537df250426834eed95c607cf190543abc8cf63"
+    },
+    {
+      "path": "CODEX_START_HERE.md",
+      "bytes": 5155,
+      "sha256": "9e37f342bc7b58255687679c90bb9b5febb1458c5f57f1221d2937f89995008a"
+    },
+    {
+      "path": "DESIGN_SPEC.md",
+      "bytes": 14150,
+      "sha256": "3d3b01ae860b83331df06fbf7d6948ea9ed0587ca68daa9831d69e23fbe533a8"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3425,
+      "sha256": "73ce2a1df75b54156dec332016fd6591c621d8fdbb930706610d7ae73e16792c"
+    },
+    {
+      "path": "assets/fonts/IoskeleyMono-Medium.ttf",
+      "bytes": 1500176,
+      "sha256": "783e955d34676c9ba6586fcb2bb5507b8c814074f86a6c5400fbac251c005846"
+    },
+    {
+      "path": "assets/fonts/IoskeleyMono-Regular.ttf",
+      "bytes": 1502292,
+      "sha256": "754a1a04f5a192c9a6bf97742ee06a793629e5e8a46e57d289c8b30b385454f9"
+    },
+    {
+      "path": "assets/fonts/IoskeleyMono-SemiBold.ttf",
+      "bytes": 1498228,
+      "sha256": "da75d383cf942e048de60c57cb8fe5b0f7050a685a5f3dbded538e4115e0d8dc"
+    },
+    {
+      "path": "assets/fonts/LICENSE.txt",
+      "bytes": 4300,
+      "sha256": "1084285bd2bddf706d566e11a92fcbae2706da4a8eafac49ed34c871d01fb7fe"
+    },
+    {
+      "path": "assets/fonts/source-metadata.json",
+      "bytes": 434,
+      "sha256": "76c6185d2556792282e7bf50dd50c1fdc46d37216caa1c824f7c413f1af36658"
+    },
+    {
+      "path": "design-tokens.json",
+      "bytes": 3326,
+      "sha256": "eb891f85afe7e4afc07bdac71130b778dc6c5e00fd6d0db26e18caf33cc8a13f"
+    },
+    {
+      "path": "fixtures/playable-flop-seed.json",
+      "bytes": 3201,
+      "sha256": "f29f15268db6a24e3dcf6e4bb7540233ad6c6c84446d2e54c12384826631a214"
+    },
+    {
+      "path": "fixtures/visual-postflop.json",
+      "bytes": 2220,
+      "sha256": "1f9dd60a803fa646f85d30f6f259118bf5d44430ca5d34c11814f413907f771c"
+    },
+    {
+      "path": "references/GENERATION_NOTES.md",
+      "bytes": 2220,
+      "sha256": "3cdfccd62365eb6f5e04d5fbad015fbe9ec251726d08ea76b9f111c70477df36"
+    },
+    {
+      "path": "references/felted-achievement.png",
+      "bytes": 1880364,
+      "sha256": "dbf535c753b48d29c1d7c4cc3838b817d9c3127e07055982771b7edbbcfaa165"
+    },
+    {
+      "path": "references/felted-club.png",
+      "bytes": 1791792,
+      "sha256": "257bf4ef0d957a2462efa2daeed789fbdbdaea4a5548d9e09b7c05a0199dc27a"
+    },
+    {
+      "path": "references/felted-table.png",
+      "bytes": 1627962,
+      "sha256": "2cab66e4b3af578283a79a8dd00daad179460dd81e0ed13fabe22b98dac546ae"
+    }
+  ]
+}

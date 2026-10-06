@@ -1,0 +1,19 @@
+{
+  "passed": [
+    "Bundled Ioskeley font loads",
+    "Club joins playable seed; call and scripted response produce exact pots",
+    "Raise sheet validates legal total bounds and requires explicit submission",
+    "Unopened demo offers Check / Bet with legal minimum",
+    "Folding retains seats and exposes explicit folded state",
+    "Equip persists after reload; collection detail distinguishes locked objects",
+    "Local chat, reaction mute, sound/haptics and reduced-motion preferences persist",
+    "Host flow creates an honest local table and demo invitation",
+    "375\u00d7667: 2\u20139 players, river, no collisions; 44-point targets",
+    "390\u00d7844: 2\u20139 players, river, no collisions; 44-point targets",
+    "430\u00d7932: 2\u20139 players, river, no collisions; 44-point targets",
+    "Long names and large amounts have full accessible detail",
+    "Simplified table exposes readable player list with Reduce Motion",
+    "No browser runtime or console errors"
+  ],
+  "errors": []
+}

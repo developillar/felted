@@ -1,0 +1,110 @@
+{
+  "id": "felted-reference-postflop",
+  "kind": "visual_only_not_engine_state",
+  "currency": "USD",
+  "moneyUnit": "integer_cents",
+  "warning": "Matches concept screenshot only. Action order, pot construction and legal action availability are not certified. Do not replay this as a legal hand or use it as a rules test.",
+  "capacity": 9,
+  "occupiedPlayers": 8,
+  "variant": "NLH",
+  "street": "flop",
+  "smallBlindCents": 10,
+  "bigBlindCents": 20,
+  "heroId": "hero",
+  "actingPlayerId": "hero",
+  "potCents": 1490,
+  "callLabelCents": 460,
+  "board": [
+    "Qh",
+    "8s",
+    "5d"
+  ],
+  "heroCards": [
+    "8h",
+    "8c"
+  ],
+  "heroHandLabel": "Three of a kind",
+  "clockwiseSeatOrder": [
+    "hero",
+    "nico",
+    "rune",
+    "ava",
+    "theo",
+    "empty",
+    "mina",
+    "sol",
+    "jules"
+  ],
+  "seats": [
+    {
+      "id": "hero",
+      "name": "You",
+      "stackCents": 9860,
+      "avatar": "black-cat-knit",
+      "status": "active",
+      "equippedCrest": "the-reader"
+    },
+    {
+      "id": "nico",
+      "name": "Nico",
+      "stackCents": 990,
+      "avatar": "cloth-ghost",
+      "status": "folded"
+    },
+    {
+      "id": "rune",
+      "name": "Rune",
+      "stackCents": 200,
+      "avatar": "fox-glasses",
+      "displayAction": "Raise",
+      "displayContributionCents": 460
+    },
+    {
+      "id": "ava",
+      "name": "Ava",
+      "stackCents": 4290,
+      "avatar": "purple-headphones"
+    },
+    {
+      "id": "theo",
+      "name": "Theo",
+      "stackCents": 2615,
+      "avatar": "cap-skater",
+      "positionLabel": "D"
+    },
+    {
+      "id": "empty",
+      "name": "Invite",
+      "status": "empty"
+    },
+    {
+      "id": "mina",
+      "name": "Mina",
+      "stackCents": 2250,
+      "avatar": "rabbit",
+      "status": "folded",
+      "positionLabel": "SB"
+    },
+    {
+      "id": "sol",
+      "name": "Sol",
+      "stackCents": 6170,
+      "avatar": "frog-knit",
+      "status": "folded",
+      "positionLabel": "BB"
+    },
+    {
+      "id": "jules",
+      "name": "Jules",
+      "stackCents": 3700,
+      "avatar": "helmet",
+      "displayAction": "Check",
+      "reaction": "Nice hand"
+    }
+  ],
+  "displayActions": [
+    "Fold",
+    "Call $4.60",
+    "Raise"
+  ]
+}

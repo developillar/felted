@@ -1,0 +1,25 @@
+node_modules/
+.expo/
+dist/
+*.tsbuildinfo
+.env*
+!.env.example
+artifacts/*.webm
+artifacts/*.mp4
+artifacts/*.png
+artifacts/*.json
+artifacts/video/
+
+# Keep the delivered review evidence; scratch captures stay ignored.
+!artifacts/club-*x*.png
+!artifacts/reader-*x*.png
+!artifacts/table-*players-*x*.png
+!artifacts/table-reference-*x*.png
+!artifacts/table-longnames-*x*.png
+!artifacts/table-accessible-list-*x*.png
+!artifacts/call-accepted-*x*.png
+!artifacts/raise-sheet-*x*.png
+!artifacts/interaction.mp4
+!artifacts/interaction-review.webm
+!artifacts/review-results.json
+!artifacts/restoration-results.json
