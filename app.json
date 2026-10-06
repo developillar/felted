@@ -2,10 +2,10 @@
   "expo": {
     "name": "Felted",
     "slug": "felted",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
     "ios": { "supportsTablet": false },
-    "web": { "name": "Felted", "output": "single" }
+    "web": { "name": "Felted", "output": "single", "favicon": "./assets/favicon.png" }
   }
 }

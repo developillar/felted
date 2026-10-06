@@ -23,3 +23,9 @@ artifacts/video/
 !artifacts/interaction-review.webm
 !artifacts/review-results.json
 !artifacts/restoration-results.json
+!artifacts/poker-*x*.png
+!artifacts/collection-*x*.png
+!artifacts/interaction-engine.mp4
+!artifacts/interaction-engine.webm
+!artifacts/poker-review-results.json
+!artifacts/poker-build-results.json

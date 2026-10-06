@@ -20,6 +20,8 @@ an additional ninth unique portrait is a later polish asset.
 
 Four curated reaction icons and all navigation/card suits are native vector or
 text components. The Reader art also supplies the small equipped gameplay crest.
+`favicon.svg` is an authored vector mark from the same original line-icon family;
+`favicon.png` is its 256-pixel raster export for Expo's favicon pipeline.
 
 Art refinement remaining: individual 1024×1024 transparent portrait masters,
 a high-resolution isolated Reader and slight three-quarter view, and a scene

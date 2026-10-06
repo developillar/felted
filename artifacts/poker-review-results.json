@@ -1,0 +1,23 @@
+{
+  "passed": [
+    "Bundled Ioskeley font and refreshed Club load",
+    "Join deals a real six-player hand and keeps opponents cards hidden",
+    "Validated raise and all four streets lead to showdown and a conserved payout",
+    "Three successive hands rotate the dealer and produce inspectable session history",
+    "Pause, reload, leave and resume retain the exact dealt hand and stacks",
+    "Fold finishes a heads-up hand, refunds unmatched chips and retains seats",
+    "All-in preset submits the full stack and finishes with a valid payout",
+    "Rules practice actually unlocks The Reader; equipped crest persists; future objects stay locked",
+    "Chat survives sheet dismissal; mute, sound, haptics and Reduce Motion persist",
+    "Named hosting creates a real nine-player local practice table",
+    "Practice setup applies player count and stack preset",
+    "375\u00d7667: all 2\u20139 visual occupancies and 2/6/9 real tables fit; 44-point targets",
+    "390\u00d7844: all 2\u20139 visual occupancies and 2/6/9 real tables fit; 44-point targets",
+    "430\u00d7932: all 2\u20139 visual occupancies and 2/6/9 real tables fit; 44-point targets",
+    "Compact nine-seat layout also fits with reduced available height",
+    "Long money and names expose full details; simplified table exposes player list",
+    "Normal-motion card entrances, press feedback and sheet transitions play without runtime errors",
+    "No browser runtime or console errors"
+  ],
+  "errors": []
+}
