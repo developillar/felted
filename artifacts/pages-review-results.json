@@ -1,6 +1,5 @@
 {
   "target": "GitHub Pages production build served locally at /felted/",
-  "public_site_verified": false,
   "passed": [
     "Production Club, bundled fonts and script/favicon load under /felted/",
     "Touch-enabled 390x844 browser completes heads-up game with conserved chips and 52 unique cards",
@@ -109,5 +108,18 @@
       "url": "http://127.0.0.1:9061/felted/favicon.ico",
       "status": 200
     }
-  ]
+  ],
+  "public_http_verified": false,
+  "public_http_limitation": "Cloud egress policy blocks developillar.github.io. Deployment success verified via the public GitHub workflow page.",
+  "deployment": {
+    "status": "success",
+    "status_verified": true,
+    "workflow_url": "https://github.com/developillar/felted/actions/runs/37550170579",
+    "branch": "gh-pages",
+    "commit": "08efab978120833d3e7d224337d3d63a5a35a230",
+    "page_url": "https://developillar.github.io/felted/",
+    "index_matches_tested_build": true,
+    "index_sha256": "7f096c2b96dab8f6d21759f4ed2e528e715ab733f46e0d21a0c9799b809e3b99",
+    "repeat_publish": "Verified no changes; no additional commit or push was made."
+  }
 }

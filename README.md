@@ -21,11 +21,13 @@ development client, use `npm start`.
 
 ## Phone preview on GitHub Pages
 
-The generated site is published on the `gh-pages` branch. In the repository's
-[Pages settings](https://github.com/developillar/felted/settings/pages), select
-**Deploy from a branch**, **gh-pages**, **/ (root)**, then **Save**. Once GitHub
-finishes deploying, open **https://developillar.github.io/felted/** on your phone.
-Tap **Join table** to play against bots; sessions are saved in that browser.
+Open **https://developillar.github.io/felted/** on your phone. Tap **Join table**
+to play against bots; sessions are saved in that browser. GitHub confirmed the
+first Pages deployment completed successfully for the tested build.
+
+The generated site is published on `gh-pages`. The repository's
+[Pages settings](https://github.com/developillar/felted/settings/pages) use
+**Deploy from a branch**, **gh-pages**, **/ (root)**.
 
 To publish a new version from a checkout with GitHub push access:
 
@@ -40,9 +42,12 @@ the Pages path for another project. `.nojekyll` preserves Expo's `_expo` files.
 Publishing replaces only the generated `gh-pages` files, preserves branch
 history, and uses a normal push so concurrent updates are rejected.
 
-The Pages build is checked locally in a touch-enabled mobile browser. Public
-deployment status and activation require access to GitHub's Pages settings or
-API; pushing the branch alone does not confirm the public site is live.
+The production build was checked in a touch-enabled mobile browser: complete
+gameplay, reload persistence, asset paths, and controls at 375×667, 390×844 and
+430×932. See [`artifacts/pages-review-results.json`](artifacts/pages-review-results.json)
+for build checks and the confirmed GitHub deployment. Direct requests to the
+public site are blocked by this cloud's network policy; GitHub's successful
+deployment was verified through its public workflow page.
 
 ## Settle in
 
