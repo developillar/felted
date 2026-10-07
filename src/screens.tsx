@@ -1,31 +1,36 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
-  Image,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
   useWindowDimensions,
 } from "react-native";
-import { art } from "./assets";
 import {
   Avatar,
   Button,
   Collectible,
   Header,
   Icon,
-  IconButton,
   Mono,
   PlayingCard,
   Surface,
   TimerArc,
-  Wordmark,
 } from "./components";
 import { compactMoney, DEMO_TURN_SECONDS, money, Seat } from "./game";
 import { arenaLayout } from "./layout";
 import { C, F } from "./theme";
-import { Entrance } from "./motion";
+import { Entrance, Pulse } from "./motion";
+import { Anchor } from "./player-card";
+import {
+  Atmosphere,
+  Chip,
+  FeltSurface,
+  PayoutFlight,
+  StreetMoment,
+  VictorySpark,
+  WagerFlight,
+} from "./visuals";
 
 export function AvatarSeat({
   seat,
@@ -33,20 +38,28 @@ export function AvatarSeat({
   onPress,
   simple,
   acting = false,
+  dealKey,
 }: {
   seat: Seat;
   size: number;
-  onPress: () => void;
+  onPress: (anchor: Anchor) => void;
   simple?: boolean;
   acting?: boolean;
+  dealKey?: number;
 }) {
   const folded = seat.status === "folded";
+  const target = useRef<View>(null);
   return (
     <Pressable
+      ref={target}
       testID={`seat-${seat.id}`}
       accessibilityRole="button"
       accessibilityLabel={`${seat.name}, ${seat.status ?? "active"}, stack ${money(seat.stackCents)}, ${seat.positionLabel ?? ""}${seat.displayAction ?? seat.lastAction ?? ""}. Player details`}
-      onPress={onPress}
+      onPress={() =>
+        target.current?.measureInWindow((x, y, width, height) =>
+          onPress({ x, y, width, height }),
+        )
+      }
       style={s.seat}
     >
       {seat.status === "empty" ? (
@@ -71,9 +84,74 @@ export function AvatarSeat({
                   : C.borderStrong,
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "#101015",
+              backgroundColor: "#261C32",
+              shadowColor: acting ? C.accent : seat.winner ? C.gold : "#000",
+              shadowOpacity: acting || seat.winner ? 0.3 : 0,
+              shadowRadius: 12,
+              shadowOffset: { width: 0, height: 0 },
             }}
           >
+            {(acting || seat.winner) && (
+              <Pulse
+                style={{
+                  position: "absolute",
+                  inset: -5,
+                  borderRadius: size,
+                  borderWidth: 1,
+                  borderColor: seat.winner ? C.gold : C.accent,
+                }}
+              >
+                <View />
+              </Pulse>
+            )}
+            {!seat.revealed &&
+              seat.status !== "out" &&
+              seat.status !== "empty" && (
+                <View
+                  pointerEvents="none"
+                  accessible={false}
+                  style={{
+                    position: "absolute",
+                    right: -7,
+                    top: -5,
+                    opacity: folded ? 0.15 : 0.8,
+                  }}
+                >
+                  <Entrance
+                    identity={dealKey}
+                    delay={80}
+                    distance={18}
+                    duration={420}
+                  >
+                    <View
+                      style={{
+                        width: 15,
+                        height: 21,
+                        borderRadius: 3,
+                        backgroundColor: "#513564",
+                        borderWidth: 1,
+                        borderColor: "#A58BBB",
+                        transform: [{ rotate: "18deg" }],
+                      }}
+                    />
+                  </Entrance>
+                  <View style={{ position: "absolute", left: -7, top: 0 }}>
+                    <Entrance identity={dealKey} distance={18} duration={420}>
+                      <View
+                        style={{
+                          width: 15,
+                          height: 21,
+                          borderRadius: 3,
+                          backgroundColor: "#412A54",
+                          borderWidth: 1,
+                          borderColor: "#A58BBB",
+                          transform: [{ rotate: "-8deg" }],
+                        }}
+                      />
+                    </Entrance>
+                  </View>
+                </View>
+              )}
             <Avatar kind={seat.avatar} size={size - 3} dim={folded} />
             {seat.positionLabel && (
               <View style={s.blind}>
@@ -103,7 +181,13 @@ export function AvatarSeat({
               <Mono
                 numberOfLines={1}
                 maxFontSizeMultiplier={1.2}
-                style={s.seatName}
+                style={[
+                  s.seatName,
+                  {
+                    fontFamily: F.ui,
+                    color: folded ? C.textMuted : C.textPrimary,
+                  },
+                ]}
               >
                 {seat.name}
               </Mono>
@@ -159,30 +243,40 @@ export function HeroDock({
   compact,
   awaitingDeal = false,
   handLabel = "Three of a kind",
+  dealKey,
 }: {
   hero: Seat;
   equipped: boolean;
   remaining: number;
   active: boolean;
-  onProfile: () => void;
+  onProfile: (anchor: Anchor) => void;
   compact: boolean;
   awaitingDeal?: boolean;
   handLabel?: string;
+  dealKey?: string | number;
 }) {
+  const target = useRef<View>(null);
   return (
     <Surface
       style={{
-        padding: 14,
-        minHeight: compact ? 94 : 106,
+        padding: 12,
+        minHeight: compact ? 88 : 98,
         flexDirection: "row",
         alignItems: "center",
         gap: 10,
+        backgroundColor: "#21172C",
+        borderColor: hero.winner ? C.gold : active ? "#83639D" : "#473353",
       }}
     >
       <Pressable
+        ref={target}
         accessibilityRole="button"
         accessibilityLabel={`Your profile, stack ${money(hero.stackCents)}${equipped ? ", The Reader equipped" : ""}`}
-        onPress={onProfile}
+        onPress={() =>
+          target.current?.measureInWindow((x, y, width, height) =>
+            onProfile({ x, y, width, height }),
+          )
+        }
         style={{ width: 56, height: 56 }}
       >
         <Avatar size={56} />
@@ -196,15 +290,12 @@ export function HeroDock({
         )}
       </Pressable>
       <View style={{ flex: 1, gap: 5 }}>
-        <Mono style={{ fontSize: 13 }}>
+        <Mono style={{ fontSize: 12, fontFamily: F.ui }}>
           {hero.status === "folded"
             ? "You · folded"
             : `You${hero.positionLabel ? ` · ${hero.positionLabel}` : ""}`}
         </Mono>
-        <Mono
-          numberOfLines={1}
-          style={{ fontSize: 16, color: C.textSecondary }}
-        >
+        <Mono numberOfLines={1} style={{ fontSize: 16, color: C.textPrimary }}>
           {compactMoney(hero.stackCents).slice(1)}
         </Mono>
       </View>
@@ -216,15 +307,17 @@ export function HeroDock({
               code={awaitingDeal ? undefined : code}
               width={compact ? 43 : 48}
               rotation={awaitingDeal ? 0 : i ? 6 : -6}
-              delay={i * 65}
+              delay={i * 90}
               emptyLabel="Hole card not dealt"
               highlighted={hero.winner}
+              dealKey={dealKey}
             />
           ))}
         </View>
         <Mono
           style={{
-            fontSize: 9,
+            fontSize: 10,
+            fontFamily: F.ui,
             color: hero.winner ? C.positive : C.textSecondary,
           }}
         >
@@ -269,6 +362,10 @@ export function TableScreen({
   onNext,
   paused = false,
   onResume,
+  raiseControl,
+  tableName = "The Night Shift",
+  lastEvent,
+  heroAwardCents,
 }: {
   seats: Seat[];
   hero: Seat;
@@ -289,7 +386,7 @@ export function TableScreen({
   host: boolean;
   onMenu: () => void;
   onChat: () => void;
-  onSeat: (seat: Seat) => void;
+  onSeat: (seat: Seat, anchor?: Anchor) => void;
   onInfo: () => void;
   onFold: () => void;
   onCall: () => void;
@@ -303,39 +400,85 @@ export function TableScreen({
   onNext?: () => void;
   paused?: boolean;
   onResume?: () => void;
+  raiseControl?: React.ReactNode;
+  tableName?: string;
+  lastEvent?: string;
+  heroAwardCents?: number;
 }) {
   const { height } = useWindowDimensions();
   const compact = height < 740;
   const [arena, setArena] = useState({ width: 351, height: 400 });
-  const layout = arenaLayout(arena.width, arena.height, seats.length);
+  const fullLayout = arenaLayout(arena.width, arena.height, seats.length);
+  const condensed = arena.height < 270;
+  const layout = condensed
+    ? {
+        ...fullLayout,
+        cardWidth: 34,
+        board: {
+          x: (arena.width - 186) / 2,
+          y: Math.max(0, (arena.height - 134) / 2),
+          width: 186,
+          height: 134,
+        },
+      }
+    : fullLayout;
+  const actorIndex = seats.findIndex((seat) => seat.id === actorId);
+  const actorPosition =
+    actorIndex >= 0
+      ? layout.seats[actorIndex]!
+      : {
+          x: arena.width / 2 - 12,
+          y: arena.height - 12,
+          width: 24,
+          height: 24,
+        };
+  const winnerTargets = seats.flatMap((seat, index) =>
+    seat.winner ? [{ id: seat.id, ...layout.seats[index]! }] : [],
+  );
+  if (hero.winner)
+    winnerTargets.push({
+      id: "hero",
+      x: arena.width / 2 - 12,
+      y: arena.height - 12,
+      width: 24,
+      height: 24,
+    });
   return (
     <View style={{ flex: 1 }}>
-      <Header onLeft={onMenu} onChat={onChat} />
+      <Atmosphere />
+      <Header onLeft={onMenu} onChat={onChat} subtitle={tableName} />
       <View
         testID="arena"
         onLayout={(e) => setArena(e.nativeEvent.layout)}
         style={s.arena}
       >
-        {seats.map((seat, i) => (
-          <View
-            key={seat.id}
-            style={{
-              position: "absolute",
-              left: layout.seats[i]!.x,
-              top: layout.seats[i]!.y,
-              width: layout.seats[i]!.width,
-              height: layout.seats[i]!.height,
-            }}
-          >
-            <AvatarSeat
-              seat={seat}
-              size={layout.avatarSize}
-              onPress={() => onSeat(seat)}
-              simple={simple}
-              acting={actorId === seat.id && !paused}
-            />
-          </View>
-        ))}
+        <FeltSurface
+          width={arena.width}
+          height={arena.height}
+          complete={complete}
+        />
+        {!condensed &&
+          seats.map((seat, i) => (
+            <View
+              key={seat.id}
+              style={{
+                position: "absolute",
+                left: layout.seats[i]!.x,
+                top: layout.seats[i]!.y,
+                width: layout.seats[i]!.width,
+                height: layout.seats[i]!.height,
+              }}
+            >
+              <AvatarSeat
+                seat={seat}
+                size={layout.avatarSize}
+                onPress={(anchor) => onSeat(seat, anchor)}
+                simple={simple}
+                acting={actorId === seat.id && !paused}
+                dealKey={handNumber}
+              />
+            </View>
+          ))}
         <View
           testID="board-stage"
           style={{
@@ -345,12 +488,32 @@ export function TableScreen({
             width: layout.board.width,
             height: layout.board.height,
             alignItems: "center",
-            gap: 12,
-            paddingTop: 10,
+            gap: condensed ? 4 : 8,
+            paddingTop: 3,
             borderRadius: 22,
-            backgroundColor: "#0D0D13",
+            backgroundColor: "transparent",
           }}
         >
+          {!condensed && layout.board.y > layout.avatarSize + 69 && (
+            <View
+              pointerEvents="none"
+              style={{
+                position: "absolute",
+                top: -26,
+                left: layout.board.width / 2 - 21,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <Chip size={22} gold />
+              <View style={{ marginLeft: -6, marginTop: -5 }}>
+                <Chip size={24} />
+              </View>
+              <View style={{ marginLeft: -8, marginTop: 2 }}>
+                <Chip size={21} gold />
+              </View>
+            </View>
+          )}
           <Pressable
             accessibilityRole="button"
             accessibilityLabel={`${complete ? "Awarded" : "Total"} pot ${money(potCents)}. Hand details`}
@@ -363,20 +526,33 @@ export function TableScreen({
           >
             <Mono
               style={{
-                fontSize: 10,
+                fontSize: 9,
                 color: C.textSecondary,
-                letterSpacing: 1.2,
+                letterSpacing: 1.6,
               }}
             >
-              {complete ? "AWARDED POT" : "TOTAL POT"}
+              {complete
+                ? hero.winner
+                  ? "YOUR WINNINGS"
+                  : "POT AWARDED"
+                : "TOTAL POT"}
             </Mono>
-            <Entrance identity={potCents} distance={0} duration={160}>
+            <Entrance identity={potCents} distance={4} duration={230}>
               <Mono
                 testID="pot"
-                style={{ fontFamily: F.medium, fontSize: 26 }}
+                style={{
+                  fontFamily: F.display,
+                  fontSize: condensed ? 30 : layout.cardWidth > 44 ? 45 : 38,
+                  lineHeight: condensed ? 33 : layout.cardWidth > 44 ? 48 : 42,
+                  color: complete && hero.winner ? C.gold : C.textPrimary,
+                }}
                 maxFontSizeMultiplier={1.3}
               >
-                {compactMoney(potCents)}
+                {compactMoney(
+                  complete && hero.winner
+                    ? (heroAwardCents ?? potCents)
+                    : potCents,
+                )}
               </Mono>
             </Entrance>
           </Pressable>
@@ -386,14 +562,50 @@ export function TableScreen({
                 key={i}
                 code={board[i]}
                 width={layout.cardWidth}
-                delay={i < 3 ? i * 65 : 0}
+                delay={i < 3 ? i * 100 : 0}
+                dealKey={handNumber}
+                highlighted={complete && hero.winner}
               />
             ))}
           </View>
-          <View style={{ alignItems: "center", gap: 4 }}>
-            <Mono style={{ color: C.textSecondary, fontSize: 9 }}>
-              $0.10 / $0.20 · NLH
-            </Mono>
+          <View style={{ alignItems: "center", gap: 5 }}>
+            <View
+              style={{ flexDirection: "row", gap: 7, alignItems: "center" }}
+            >
+              {["preflop", "flop", "turn", "river"].map((stage, i) => (
+                <View
+                  key={stage}
+                  style={{ flexDirection: "row", alignItems: "center", gap: 3 }}
+                >
+                  <View
+                    style={{
+                      width: 3,
+                      height: 3,
+                      borderRadius: 2,
+                      backgroundColor:
+                        board.length >= [0, 3, 4, 5][i]! ? C.accent : "#655075",
+                    }}
+                  />
+                  <Text
+                    style={{
+                      fontFamily: F.ui,
+                      fontSize: 7,
+                      letterSpacing: 0.5,
+                      color: street === stage ? C.textPrimary : C.textMuted,
+                    }}
+                  >
+                    {["PRE", "FLOP", "TURN", "RIVER"][i]}
+                  </Text>
+                </View>
+              ))}
+            </View>
+            {!condensed && (
+              <Mono style={{ color: C.textSecondary, fontSize: 9 }}>
+                {complete && hero.winner
+                  ? `From ${compactMoney(potCents)} total pot`
+                  : "$0.10 / $0.20 · NLH"}
+              </Mono>
+            )}
             {handNumber && (
               <Mono
                 testID="hand-street"
@@ -403,7 +615,7 @@ export function TableScreen({
                   textTransform: "uppercase",
                 }}
               >
-                #{handNumber} · {street} · practice
+                #{handNumber} · {street}
               </Mono>
             )}
           </View>
@@ -413,6 +625,37 @@ export function TableScreen({
             </Mono>
           )}
         </View>
+        {!condensed && (
+          <WagerFlight
+            pot={potCents}
+            hand={handNumber}
+            actor={actorId}
+            start={{
+              x: actorPosition.x + actorPosition.width / 2 - 11,
+              y: actorPosition.y + 30,
+            }}
+            end={{ x: arena.width / 2 - 11, y: layout.board.y + 35 }}
+          />
+        )}
+        {!condensed &&
+          winnerTargets.map((winner) => (
+            <PayoutFlight
+              key={winner.id}
+              complete={complete}
+              hand={handNumber}
+              start={{ x: arena.width / 2 - 13, y: layout.board.y + 35 }}
+              end={{
+                x: winner.x + winner.width / 2 - 13,
+                y: winner.y + 25,
+              }}
+            />
+          ))}
+        {complete && hero.winner && (
+          <VictorySpark identity={`win-${handNumber}`} />
+        )}
+        {!simple && !condensed && (
+          <StreetMoment street={street} hand={handNumber} />
+        )}
         {simple && (
           <View
             style={{ position: "absolute", bottom: 4, left: 80, right: 80 }}
@@ -445,75 +688,88 @@ export function TableScreen({
         )}
       </View>
       <View style={s.tableBottom}>
-        <HeroDock
-          hero={hero}
-          equipped={equipped}
-          remaining={remaining}
-          active={active}
-          onProfile={() => onSeat(hero)}
-          compact={compact}
-          awaitingDeal={host}
-          handLabel={handLabel}
-        />
-        {paused ? (
-          <Button label="Resume game" primary onPress={() => onResume?.()} />
-        ) : complete ? (
-          <Entrance identity={`result-${handNumber}`}>
-            <View style={s.actions}>
-              <Button
-                label="Review hand"
-                onPress={onInfo}
-                style={{ flex: 1, minHeight: compact ? 52 : 60 }}
-              />
-              <Button
-                label={canContinue ? "Next hand" : "New game"}
-                primary
-                onPress={() => onNext?.()}
-                style={{ flex: 1.2, minHeight: compact ? 52 : 60 }}
-              />
-            </View>
-          </Entrance>
-        ) : host ? (
-          <Button
-            label="Invite friends"
-            primary
-            onPress={() => onSeat(seats[0]!)}
-          />
+        {raiseControl ? (
+          raiseControl
         ) : (
-          <View style={s.actions}>
-            <Button
-              label="Fold"
-              onPress={onFold}
-              disabled={!canAct}
-              style={{
-                flex: 0.8,
-                minHeight: compact ? 52 : 60,
-                paddingHorizontal: 6,
-              }}
+          <>
+            <HeroDock
+              hero={hero}
+              equipped={equipped}
+              remaining={remaining}
+              active={active}
+              onProfile={(anchor) => onSeat(hero, anchor)}
+              compact={compact}
+              awaitingDeal={host}
+              handLabel={handLabel}
+              dealKey={handNumber}
             />
-            <Button
-              label={callLabel}
-              onPress={onCall}
-              primary
-              disabled={!canAct}
-              pending={pending}
-              style={{
-                flex: 1.4,
-                minHeight: compact ? 52 : 60,
-                paddingHorizontal: 6,
-              }}
-            />
-            <Button
-              label={raiseLabel ?? (callLabel === "Check" ? "Bet" : "Raise")}
-              onPress={onRaise}
-              disabled={!canRaise || !canAct}
-              style={{
-                flex: 0.8,
-                minHeight: compact ? 52 : 60,
-                paddingHorizontal: 6,
-              }}
-            />
-          </View>
+            {paused ? (
+              <Button
+                label="Resume game"
+                primary
+                onPress={() => onResume?.()}
+              />
+            ) : complete ? (
+              <Entrance identity={`result-${handNumber}`}>
+                <View style={s.actions}>
+                  <Button
+                    label="Review hand"
+                    onPress={onInfo}
+                    style={{ flex: 1, minHeight: compact ? 52 : 60 }}
+                  />
+                  <Button
+                    label={canContinue ? "Next hand" : "New game"}
+                    primary
+                    onPress={() => onNext?.()}
+                    style={{ flex: 1.2, minHeight: compact ? 52 : 60 }}
+                  />
+                </View>
+              </Entrance>
+            ) : host ? (
+              <Button
+                label="Invite friends"
+                primary
+                onPress={() => onSeat(seats[0]!)}
+              />
+            ) : (
+              <View style={s.actions}>
+                <Button
+                  label="Fold"
+                  onPress={onFold}
+                  disabled={!canAct}
+                  style={{
+                    flex: 0.8,
+                    minHeight: compact ? 52 : 60,
+                    paddingHorizontal: 6,
+                  }}
+                />
+                <Button
+                  label={callLabel}
+                  onPress={onCall}
+                  primary
+                  disabled={!canAct}
+                  pending={pending}
+                  style={{
+                    flex: 1.4,
+                    minHeight: compact ? 52 : 60,
+                    paddingHorizontal: 6,
+                  }}
+                />
+                <Button
+                  label={
+                    raiseLabel ?? (callLabel === "Check" ? "Bet" : "Raise")
+                  }
+                  onPress={onRaise}
+                  disabled={!canRaise || !canAct}
+                  style={{
+                    flex: 0.8,
+                    minHeight: compact ? 52 : 60,
+                    paddingHorizontal: 6,
+                  }}
+                />
+              </View>
+            )}
+          </>
         )}
         <Mono
           accessibilityLiveRegion="polite"
@@ -525,431 +781,14 @@ export function TableScreen({
           }}
           numberOfLines={2}
         >
-          {pending ? "Submitting…" : message}
+          {pending
+            ? "Submitting…"
+            : !active && !complete && !paused && lastEvent
+              ? `${message} · ${lastEvent}`
+              : message}
         </Mono>
       </View>
     </View>
-  );
-}
-
-export function ClubScreen({
-  onJoin,
-  onHost,
-  onCollection,
-  onProfile,
-  full = false,
-  resume = false,
-  playerCount = 6,
-  earned = true,
-  onLearn,
-  onSetup,
-  handsPlayed = 0,
-}: {
-  onJoin: () => void;
-  onHost: () => void;
-  onCollection: () => void;
-  onProfile: () => void;
-  full?: boolean;
-  resume?: boolean;
-  playerCount?: number;
-  earned?: boolean;
-  onLearn?: () => void;
-  onSetup?: () => void;
-  handsPlayed?: number;
-}) {
-  return (
-    <ScrollView
-      contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 8 }}
-      showsVerticalScrollIndicator={false}
-    >
-      <View style={s.clubHeader}>
-        <Wordmark />
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Your profile"
-          onPress={onProfile}
-          style={{ width: 44, height: 44 }}
-        >
-          <Avatar size={44} />
-        </Pressable>
-      </View>
-      <View style={s.clubHero}>
-        <Image
-          source={art.clubVignette}
-          resizeMode="cover"
-          style={{ position: "absolute", width: "100%", height: "100%" }}
-          accessible={false}
-        />
-        <View style={{ paddingTop: 20 }}>
-          <Text accessibilityRole="header" style={s.clubTitle}>
-            The{"\n"}Night Shift
-          </Text>
-          <Text style={s.subtitle}>Your people. Your table.</Text>
-        </View>
-        <View style={s.crestLabel}>
-          <Mono style={{ fontSize: 10, color: C.textSecondary }}>
-            Club crest · The Reader
-          </Mono>
-        </View>
-      </View>
-      <Surface style={{ gap: 15 }}>
-        <View style={s.row}>
-          <View style={{ flex: 1 }}>
-            <Text style={s.panelTitle}>Tonight’s table</Text>
-            <Mono style={s.metadata}>NLH · 0.10 / 0.20</Mono>
-            <Mono style={s.metadata}>No rake</Mono>
-          </View>
-          <View>
-            <View style={{ flexDirection: "row" }}>
-              {["cap-skater", "purple-headphones", "helmet", "fox-glasses"]
-                .slice(0, Math.min(4, playerCount - 1))
-                .map((kind, i) => (
-                  <View
-                    key={kind}
-                    style={{
-                      marginLeft: i ? -12 : 0,
-                      borderRadius: 24,
-                      backgroundColor: C.surface,
-                      borderWidth: 1,
-                      borderColor: C.borderStrong,
-                    }}
-                  >
-                    <Avatar kind={kind} size={38} />
-                  </View>
-                ))}
-            </View>
-            <Mono style={[s.metadata, { fontSize: 9, marginTop: 7 }]}>
-              {playerCount - 1} practice opponents
-            </Mono>
-          </View>
-        </View>
-        <Button
-          label={resume ? "Resume table" : "Join table"}
-          onPress={onJoin}
-          primary
-        />
-        <View style={[s.row, { gap: 10 }]}>
-          <View
-            style={{
-              height: 6,
-              width: 6,
-              borderRadius: 3,
-              backgroundColor: C.positive,
-            }}
-          />
-          <Text style={{ color: C.textSecondary, fontSize: 12, flex: 1 }}>
-            {resume
-              ? `${handsPlayed} hands played · your seat is saved`
-              : "Real Hold’em rules. Practice chips. Your pace."}
-          </Text>
-          {onSetup && (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Set up a practice game"
-              onPress={onSetup}
-              style={{
-                minWidth: 44,
-                minHeight: 44,
-                alignItems: "flex-end",
-                justifyContent: "center",
-              }}
-            >
-              <Icon name="chevron" size={18} color={C.accent} />
-            </Pressable>
-          )}
-        </View>
-      </Surface>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel="Host a game"
-        onPress={onHost}
-        style={{ marginTop: 12 }}
-      >
-        <Surface style={s.row}>
-          <View>
-            <Text style={s.panelTitle}>Host a game</Text>
-            <Mono style={s.metadata}>2–9 players</Mono>
-          </View>
-          <View style={s.plusCircle}>
-            <Icon name="plus" />
-          </View>
-        </Surface>
-      </Pressable>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={`Club collection, ${earned ? 1 : 0} earned`}
-        onPress={onCollection}
-        style={{ marginTop: 12 }}
-      >
-        <Surface style={{ paddingBottom: 8 }}>
-          <View style={s.row}>
-            <Mono style={{ fontSize: 14 }}>Club collection</Mono>
-            <View style={[s.row, { gap: 8 }]}>
-              <Mono style={{ fontSize: 10, color: C.textSecondary }}>
-                {earned ? 1 : 0} earned
-              </Mono>
-              <Icon name="chevron" size={18} color={C.textSecondary} />
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-around",
-              marginTop: 10,
-            }}
-          >
-            {[0, 1, 2].map((index) => (
-              <View key={index} style={{ opacity: index ? 0.6 : 1 }}>
-                <Collectible index={index} size={85} />
-              </View>
-            ))}
-          </View>
-        </Surface>
-      </Pressable>
-      {onLearn && (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Learn the game"
-          onPress={onLearn}
-          style={{ padding: 16, minHeight: 44, alignItems: "center" }}
-        >
-          <Mono style={{ color: C.accent, fontSize: 12 }}>
-            A little knowledge goes a long way ↗
-          </Mono>
-        </Pressable>
-      )}
-    </ScrollView>
-  );
-}
-
-export function ReaderScreen({
-  equipped,
-  onEquip,
-  onCollection,
-  onClose,
-  onInfo,
-  earned = true,
-  onLearn,
-}: {
-  equipped: boolean;
-  onEquip: () => void;
-  onCollection: () => void;
-  onClose: () => void;
-  onInfo: () => void;
-  earned?: boolean;
-  onLearn?: () => void;
-}) {
-  const { height } = useWindowDimensions();
-  const compact = height < 740;
-  return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 8 }}
-    >
-      <View style={[s.row, { paddingHorizontal: 16, height: 56 }]}>
-        <IconButton name="close" label="Back to club" onPress={onClose} />
-        <Wordmark />
-        <IconButton name="share" label="Achievement details" onPress={onInfo} />
-      </View>
-      <Entrance identity="reader" distance={10} duration={450}>
-        <View style={{ alignItems: "center", paddingTop: 16, gap: 8 }}>
-          <Text accessibilityRole="header" style={s.readerTitle}>
-            The Reader
-          </Text>
-          <Text style={s.subtitle}>A sharper eye. A calmer game.</Text>
-          <View style={s.category}>
-            <Mono style={{ fontSize: 9, letterSpacing: 1.5 }}>
-              KNOWLEDGE · {equipped ? "EQUIPPED" : earned ? "EARNED" : "LOCKED"}
-            </Mono>
-          </View>
-        </View>
-      </Entrance>
-      <View
-        style={{
-          height: compact ? 242 : 310,
-          overflow: "hidden",
-          marginTop: 8,
-        }}
-      >
-        <Image
-          source={art.readerScene}
-          resizeMode="cover"
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "165%",
-            top: "-16%",
-          }}
-          accessibilityLabel="The Reader, a hollow optical glass spade on a basalt plinth"
-        />
-      </View>
-      <View style={{ paddingHorizontal: 24, gap: 10 }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-          <View style={s.checkCircle}>
-            <Icon
-              name={earned ? "check" : "lock"}
-              size={16}
-              color={C.textOnAccent}
-            />
-          </View>
-          <Mono style={{ fontSize: 13, flex: 1 }}>
-            {earned
-              ? "Knowledge milestone complete"
-              : "A small practice. A sharper eye."}
-          </Mono>
-        </View>
-        <Text
-          style={{
-            fontSize: 13,
-            lineHeight: 19,
-            textAlign: "center",
-            color: C.textSecondary,
-          }}
-        >
-          {earned
-            ? "Completed the rules and side-pot practice."
-            : "Learn the rules and solve one side-pot question."}
-        </Text>
-        <View style={s.reward}>
-          <Icon name="nod" size={31} color={C.textSecondary} />
-          <View
-            style={{
-              borderLeftWidth: 1,
-              borderColor: C.borderStrong,
-              paddingLeft: 18,
-              gap: 5,
-            }}
-          >
-            <Mono style={{ fontSize: 9, letterSpacing: 2, color: C.textMuted }}>
-              UNLOCKS
-            </Mono>
-            <Mono style={{ fontSize: 12 }}>the Quiet Nod reaction</Mono>
-          </View>
-        </View>
-        <Button
-          label={
-            equipped
-              ? "Crest equipped"
-              : earned
-                ? "Equip crest"
-                : "Begin the practice"
-          }
-          onPress={earned ? onEquip : () => onLearn?.()}
-          primary={!equipped}
-          disabled={equipped}
-        />
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="View collection"
-          onPress={onCollection}
-          style={{
-            minHeight: 44,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Mono style={{ color: C.accent, fontSize: 13 }}>View collection</Mono>
-        </Pressable>
-      </View>
-    </ScrollView>
-  );
-}
-
-export function CollectionScreen({
-  earned,
-  equipped,
-  onReader,
-  onObject,
-  onProfile,
-}: {
-  earned: boolean;
-  equipped: boolean;
-  onReader: () => void;
-  onObject: (index: number) => void;
-  onProfile: () => void;
-}) {
-  return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16 }}
-    >
-      <View style={s.clubHeader}>
-        <Wordmark />
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel="Your profile"
-          onPress={onProfile}
-          style={{ width: 44, height: 44 }}
-        >
-          <Avatar size={44} />
-        </Pressable>
-      </View>
-      <Entrance identity="collection">
-        <View style={{ paddingVertical: 24, gap: 8 }}>
-          <Mono style={{ color: C.accent, fontSize: 10, letterSpacing: 2 }}>
-            PERSONAL OBJECTS
-          </Mono>
-          <Text style={s.readerTitle}>Your collection</Text>
-          <Text style={s.subtitle}>Little objects. A little of you.</Text>
-        </View>
-      </Entrance>
-      <Mono style={{ color: C.textSecondary, marginBottom: 16 }}>
-        {earned ? "1 earned" : "Your first object is waiting"} · 3 objects
-      </Mono>
-      {["The Reader", "The Host", "Good Company"].map((name, i) => (
-        <Pressable
-          key={name}
-          accessibilityRole="button"
-          accessibilityLabel={`${name}, ${i === 0 && earned ? (equipped ? "equipped" : "earned") : "locked"}`}
-          onPress={() => (i === 0 ? onReader() : onObject(i))}
-          style={{ marginBottom: 12 }}
-        >
-          <Surface style={{ padding: 20, gap: 12 }}>
-            <View
-              style={{
-                alignItems: "center",
-                minHeight: 140,
-                justifyContent: "center",
-              }}
-            >
-              <Collectible index={i} size={150} />
-            </View>
-            <View style={s.row}>
-              <View style={{ gap: 6 }}>
-                <Text style={s.panelTitle}>{name}</Text>
-                <Mono
-                  style={{
-                    fontSize: 10,
-                    color: i === 0 && earned ? C.positive : C.textSecondary,
-                  }}
-                >
-                  {i === 0 && earned
-                    ? equipped
-                      ? "Equipped"
-                      : "Earned"
-                    : "Locked"}
-                </Mono>
-              </View>
-              <Icon
-                name={i === 0 && earned ? "chevron" : "lock"}
-                color={C.textSecondary}
-              />
-            </View>
-            <Text
-              style={{ color: C.textSecondary, lineHeight: 20, fontSize: 14 }}
-            >
-              {
-                [
-                  "Complete the rules and side-pot practice.",
-                  "Bring your people together. Live hosting is still to come.",
-                  "A little appreciation from someone at your table.",
-                ][i]
-              }
-            </Text>
-          </Surface>
-        </Pressable>
-      ))}
-    </ScrollView>
   );
 }
 
@@ -985,7 +824,7 @@ const s = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  arena: { flex: 1, marginHorizontal: 12, marginTop: 6 },
+  arena: { flex: 1, marginHorizontal: 12, marginTop: 6, overflow: "hidden" },
   reaction: {
     position: "absolute",
     bottom: 1,
@@ -1007,82 +846,4 @@ const s = StyleSheet.create({
     gap: 10,
   },
   actions: { flexDirection: "row", gap: 7 },
-  clubHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    height: 56,
-  },
-  clubHero: { height: 218, overflow: "hidden" },
-  clubTitle: {
-    color: C.textPrimary,
-    fontSize: 35,
-    lineHeight: 39,
-    fontWeight: "600",
-    maxWidth: 240,
-  },
-  subtitle: {
-    color: C.textSecondary,
-    fontSize: 14,
-    lineHeight: 20,
-    marginTop: 4,
-  },
-  crestLabel: {
-    position: "absolute",
-    bottom: 14,
-    alignSelf: "center",
-    backgroundColor: "#0B0B10DD",
-    borderWidth: 1,
-    borderColor: C.borderSubtle,
-    borderRadius: 18,
-    paddingVertical: 7,
-    paddingHorizontal: 15,
-  },
-  panelTitle: {
-    color: C.textPrimary,
-    fontSize: 21,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  metadata: { color: C.textSecondary, fontSize: 10, lineHeight: 16 },
-  plusCircle: {
-    height: 44,
-    width: 44,
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: C.borderStrong,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  readerTitle: {
-    color: C.textPrimary,
-    fontSize: 34,
-    lineHeight: 40,
-    fontWeight: "600",
-  },
-  category: {
-    paddingVertical: 7,
-    paddingHorizontal: 14,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: C.borderStrong,
-    marginTop: 8,
-  },
-  checkCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    backgroundColor: C.accent,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  reward: {
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderColor: C.borderSubtle,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 20,
-  },
 });

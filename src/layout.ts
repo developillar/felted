@@ -8,7 +8,6 @@ export function overlaps(a: Rect, b: Rect) {
   );
 }
 export function arenaLayout(width: number, height: number, slots: number) {
-  const dense = slots >= 6;
   const seatWidth = 68;
   const avatarSize = height < 390 ? 44 : 52;
   const seatHeight = avatarSize + 43;
@@ -86,11 +85,14 @@ export function arenaLayout(width: number, height: number, slots: number) {
       [xRight, midY],
       [xRight, bottomY],
     ];
-  const cardWidth = dense
-    ? Math.min(34, (width - 2 * seatWidth - 30 - 16) / 5)
-    : 38;
+  const cardWidth =
+    slots <= 2
+      ? height >= 350
+        ? 52
+        : 38
+      : Math.min(44, (width - 2 * seatWidth - 28) / 5);
   const boardWidth = cardWidth * 5 + 16;
-  const boardHeight = 161;
+  const boardHeight = cardWidth > 44 ? 205 : cardWidth > 40 ? 174 : 161;
   const board = {
     x: (width - boardWidth) / 2,
     y: Math.max(seatHeight + 14, (height - boardHeight) / 2 + 26),

@@ -1,17 +1,8 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import { Avatar, Button, Collectible, Icon, Mono, Surface } from "./components";
-import {
-  actionOptions,
-  DemoState,
-  money,
-  parseAmount,
-  Seat,
-  validateAmount,
-} from "./game";
+import { Button, Collectible, Icon, Mono, Surface } from "./components";
 import { Preferences } from "./preferences";
 import { C, F } from "./theme";
-import { Hand, legalActions, potTotal, validateWager } from "./poker/engine";
 
 export function Copy({ children }: React.PropsWithChildren) {
   return <Text style={s.copy}>{children}</Text>;
@@ -90,110 +81,6 @@ export function Settings({
     </>
   );
 }
-export function RaiseSheet({
-  state,
-  onSubmit,
-}: {
-  state: DemoState | Hand;
-  onSubmit: (amount: number) => void;
-}) {
-  const engine = "players" in state;
-  const bounds = engine ? legalActions(state, "hero") : actionOptions(state),
-    bet = state.currentBetCents === 0;
-  const [input, setInput] = useState((bounds.minimum / 100).toFixed(2));
-  const amount = parseAmount(input),
-    error = engine
-      ? validateWager(state, "hero", amount)
-      : validateAmount(state, amount);
-  const setAmount = (value: number) =>
-    setInput(
-      (Math.max(bounds.minimum, Math.min(bounds.maximum, value)) / 100).toFixed(
-        2,
-      ),
-    );
-  const step = engine ? state.bigBlindCents : 20;
-  const pot = engine ? potTotal(state) : state.potCents;
-  return (
-    <>
-      <Copy>{bet ? "Bet amount" : "Raise to"} · total on this street</Copy>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-        <Button
-          label="−"
-          onPress={() => setAmount((amount ?? bounds.minimum) - step)}
-          small
-        />
-        <TextInput
-          accessibilityLabel={bet ? "Bet amount" : "Raise total amount"}
-          keyboardType="decimal-pad"
-          value={input}
-          onChangeText={setInput}
-          selectTextOnFocus
-          style={[
-            s.input,
-            {
-              flex: 1,
-              fontSize: 30,
-              fontFamily: F.medium,
-              textAlign: "center",
-            },
-          ]}
-        />
-        <Button
-          label="+"
-          onPress={() => setAmount((amount ?? bounds.minimum) + step)}
-          small
-        />
-      </View>
-      <View style={{ flexDirection: "row", gap: 6, flexWrap: "wrap" }}>
-        {[
-          ["Minimum", bounds.minimum],
-          [
-            "½ pot",
-            state.currentBetCents + Math.round((pot + bounds.owed) / 2),
-          ],
-          ["Pot", state.currentBetCents + pot + bounds.owed],
-          ["All-in", bounds.maximum],
-        ].map(([label, value]) => (
-          <Button
-            key={label}
-            small
-            label={String(label)}
-            onPress={() => setAmount(Number(value))}
-            style={{ flexGrow: 1, minWidth: 64, paddingHorizontal: 8 }}
-          />
-        ))}
-      </View>
-      <Mono style={s.meta}>
-        Minimum {money(bounds.minimum)} · Maximum {money(bounds.maximum)}
-      </Mono>
-      <Copy>
-        {amount !== null && !error
-          ? `${money(amount - bounds.contributed)} more will be committed.`
-          : "Choose a legal total before submitting."}
-      </Copy>
-      {engine && "shortAllIn" in bounds && bounds.shortAllIn && (
-        <Copy>
-          Your stack permits a short all-in. It may not reopen a previous
-          player’s raise.
-        </Copy>
-      )}
-      {error && (
-        <Text
-          accessibilityLiveRegion="polite"
-          style={{ color: C.error, fontSize: 14 }}
-        >
-          {error}
-        </Text>
-      )}
-      <Button
-        label={`${bet ? "Bet" : "Raise to"} ${amount === null ? "—" : money(amount)}`}
-        primary
-        disabled={!!error}
-        onPress={() => amount !== null && onSubmit(amount)}
-      />
-    </>
-  );
-}
 export function HostSheet({
   onCreate,
 }: {
@@ -220,7 +107,7 @@ export function HostSheet({
             small
             primary={capacity === n}
             onPress={() => setCapacity(n)}
-            style={{ minWidth: 52 }}
+            style={{ minWidth: 52, flexBasis: "22%", flexGrow: 1 }}
           />
         ))}
       </View>
@@ -293,40 +180,6 @@ export function CollectionSheet({
     </>
   );
 }
-export function PlayerSheet({
-  seat,
-  equipped,
-}: {
-  seat: Seat;
-  equipped: boolean;
-}) {
-  return (
-    <>
-      <View style={{ alignItems: "center", gap: 12 }}>
-        <Avatar kind={seat.avatar} size={90} />
-        <Text style={{ color: C.textPrimary, fontSize: 24, fontWeight: "600" }}>
-          {seat.name}
-        </Text>
-        <Mono>{money(seat.stackCents)} stack</Mono>
-        <Mono style={s.meta}>
-          {seat.status ?? "Active"}{" "}
-          {seat.positionLabel ? `· ${seat.positionLabel}` : ""}
-        </Mono>
-      </View>
-      {seat.displayContributionCents !== undefined && (
-        <Copy>Latest commitment: {money(seat.displayContributionCents)}</Copy>
-      )}
-      {seat.id === "hero" && (
-        <Copy>
-          {equipped
-            ? "The Reader is equipped on your profile and personal hand dock."
-            : "Equip an earned crest from your collection."}
-        </Copy>
-      )}
-      <Copy>Present with The Night Shift</Copy>
-    </>
-  );
-}
 const reactions = [
   { id: "nod", label: "Quiet Nod" },
   { id: "wave", label: "Wave" },
@@ -393,7 +246,12 @@ export function ChatSheet({
   );
 }
 const s = StyleSheet.create({
-  copy: { color: C.textSecondary, fontSize: 15, lineHeight: 22 },
+  copy: {
+    fontFamily: F.body,
+    color: C.textSecondary,
+    fontSize: 14,
+    lineHeight: 22,
+  },
   meta: { color: C.textSecondary, fontSize: 11, lineHeight: 18 },
   input: {
     borderWidth: 1,
@@ -402,6 +260,7 @@ const s = StyleSheet.create({
     color: C.textPrimary,
     padding: 14,
     fontSize: 16,
+    fontFamily: F.body,
     minHeight: 52,
     backgroundColor: C.surface,
   },

@@ -2,10 +2,18 @@
   "expo": {
     "name": "Felted",
     "slug": "felted",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",
-    "ios": { "supportsTablet": false },
-    "web": { "name": "Felted", "output": "single", "favicon": "./assets/favicon.png" }
+    "ios": {
+      "supportsTablet": false
+    },
+    "web": {
+      "name": "Felted",
+      "output": "single",
+      "favicon": "./assets/favicon.png",
+      "description": "Poker, with personality. Beautiful local no-limit Hold\u2019em, one good hand at a time.",
+      "themeColor": "#0B0911"
+    }
   }
 }

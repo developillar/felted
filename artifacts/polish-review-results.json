@@ -1,0 +1,18 @@
+{
+  "passed": [
+    "375x667: lobby CTA, compact inline betting, touch drag, cancel, and anchored cards for 2/6/9 players",
+    "390x844: lobby CTA, compact inline betting, touch drag, cancel, and anchored cards for 2/6/9 players",
+    "430x932: lobby CTA, compact inline betting, touch drag, cancel, and anchored cards for 2/6/9 players",
+    "Normal-motion dealing, board reveals, chip movement and payouts complete a real hand with exact conservation",
+    "No runtime or console errors in mobile interaction review"
+  ],
+  "errors": [],
+  "normal_motion_streets": [
+    "flop",
+    "preflop",
+    "river",
+    "showdown",
+    "turn"
+  ],
+  "engine": "Chromium mobile/touch; Safari and physical iPhone untested"
+}

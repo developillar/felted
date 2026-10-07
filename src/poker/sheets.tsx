@@ -31,7 +31,7 @@ export function GameSetup({
             small
             primary={count === n}
             onPress={() => setCount(n)}
-            style={{ minWidth: 52 }}
+            style={{ minWidth: 52, flexBasis: "22%", flexGrow: 1 }}
           />
         ))}
       </View>

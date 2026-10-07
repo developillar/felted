@@ -4,13 +4,18 @@ import {
   ActivityIndicator,
   AppState,
   BackHandler,
+  KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
   View,
   useWindowDimensions,
 } from "react-native";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
 import * as Haptics from "expo-haptics";
@@ -37,21 +42,11 @@ import {
   Preferences,
   savePreferences,
 } from "./src/preferences";
-import {
-  ClubScreen,
-  CollectionScreen,
-  ReaderScreen,
-  TableScreen,
-} from "./src/screens";
-import {
-  ChatSheet,
-  Copy,
-  HostSheet,
-  PlayerSheet,
-  RaiseSheet,
-  Settings,
-  Toggle,
-} from "./src/sheets";
+import { TableScreen } from "./src/screens";
+import { ClubScreen, CollectionScreen, ReaderScreen } from "./src/lobby";
+import { Anchor, FloatingPlayerCard } from "./src/player-card";
+import { InlineRaise } from "./src/raise-control";
+import { ChatSheet, Copy, HostSheet, Settings, Toggle } from "./src/sheets";
 import { C } from "./src/theme";
 import { holeLabel } from "./src/poker/cards";
 import {
@@ -84,6 +79,7 @@ type Screen = "table" | "club" | "reader" | "collection";
 type Modal =
   | null
   | "menu"
+  | "settings"
   | "preview"
   | "raise"
   | "host"
@@ -139,6 +135,7 @@ function asSeats(hand: Hand): Seat[] {
 }
 
 function Felted() {
+  const insets = useSafeAreaInsets();
   const [fonts, fontError] = useFonts(fontAssets);
   const [preferences, setPreferences] = useState<Preferences>(defaults),
     [stored, setStored] = useState(false);
@@ -174,6 +171,7 @@ function Felted() {
     [reaction, setReaction] = useState<string | null>(null);
   const [selectedSeat, setSelectedSeat] = useState<Seat | null>(null),
     [objectIndex, setObjectIndex] = useState(1);
+  const [playerAnchor, setPlayerAnchor] = useState<Anchor | null>(null);
   const [messages, setMessages] = useState<string[]>([]);
   const [deadline, setDeadline] = useState(
       Date.now() + DEMO_TURN_SECONDS * 1000,
@@ -190,6 +188,32 @@ function Felted() {
     playing = mode === "play" && !!hand;
   const remaining = Math.max(0, Math.ceil((deadline - now) / 1000));
   const reducedMotion = systemReduced || preferences.reducedMotion;
+
+  useEffect(() => {
+    if (Platform.OS !== "web") return;
+    document
+      .querySelector('meta[name="viewport"]')
+      ?.setAttribute(
+        "content",
+        "width=device-width, initial-scale=1, viewport-fit=cover",
+      );
+    const root = document.getElementById("root");
+    const viewport = window.visualViewport;
+    const resize = () => {
+      if (!root) return;
+      const keyboardVisible =
+        viewport &&
+        viewport.scale === 1 &&
+        window.innerHeight - viewport.height > 120;
+      root.style.height = keyboardVisible ? `${viewport.height}px` : "";
+    };
+    viewport?.addEventListener("resize", resize);
+    resize();
+    return () => {
+      viewport?.removeEventListener("resize", resize);
+      if (root) root.style.height = "";
+    };
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -520,6 +544,14 @@ function Felted() {
     !pending &&
     remaining > 0 &&
     !paused;
+  useEffect(() => {
+    if (modal === "raise" && !canAct) setModal(null);
+  }, [modal, canAct]);
+  function openPlayer(seat: Seat, anchor?: Anchor) {
+    setSelectedSeat(seat);
+    setPlayerAnchor(anchor ?? null);
+    setModal("player");
+  }
   const callLabel =
     playing || mode === "demo"
       ? options.owed
@@ -556,6 +588,7 @@ function Felted() {
         : "Design reference · visual only");
   const titles: Record<string, string> = {
     menu: "Your table",
+    settings: "Your preferences",
     preview: "Developer preview",
     raise: (playing ? hand.currentBetCents : demo.currentBetCents)
       ? "Raise to"
@@ -594,7 +627,9 @@ function Felted() {
     <MotionProvider value={reducedMotion}>
       <SafeAreaView edges={["top", "bottom"]} style={s.safe}>
         <StatusBar style="light" />
-        <View
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          keyboardVerticalOffset={insets.top}
           style={[
             s.app,
             Platform.OS === "web" && { paddingTop: 12, paddingBottom: 8 },
@@ -605,20 +640,22 @@ function Felted() {
               onJoin={joinTable}
               onHost={() => setModal("host")}
               onCollection={() => setScreen("collection")}
-              onProfile={() => {
-                setSelectedSeat(
+              onProfile={(anchor) => {
+                openPlayer(
                   hand
                     ? asSeats(hand).find((seat) => seat.id === "hero")!
                     : visualHero,
+                  anchor,
                 );
-                setModal("player");
               }}
               resume={!!session}
               playerCount={hand?.players.length ?? 6}
+              tableName={hand?.tableName}
               earned={preferences.learned}
               handsPlayed={session?.handsPlayed ?? 0}
               onLearn={() => setModal("learn")}
               onSetup={() => setModal("setup")}
+              onSettings={() => setModal("settings")}
             />
           )}
           {screen === "collection" && (
@@ -630,10 +667,8 @@ function Felted() {
                 setObjectIndex(index);
                 setModal("object");
               }}
-              onProfile={() => {
-                setSelectedSeat(hero);
-                setModal("player");
-              }}
+              onProfile={(anchor) => openPlayer(hero, anchor)}
+              onSettings={() => setModal("settings")}
             />
           )}
           {screen === "reader" && (
@@ -657,6 +692,7 @@ function Felted() {
               seats={seats}
               hero={hero}
               potCents={potCents}
+              heroAwardCents={playing ? hand.result?.awards.hero : undefined}
               board={board}
               equipped={preferences.equipped || mode === "visual"}
               remaining={remaining}
@@ -688,6 +724,8 @@ function Felted() {
                   : undefined
               }
               handNumber={playing ? hand.number : undefined}
+              tableName={playing ? hand.tableName : "The Night Shift"}
+              lastEvent={playing ? hand.events.at(-1)?.text : undefined}
               street={playing ? hand.street : undefined}
               complete={playing && hand.phase === "complete"}
               canContinue={canContinue}
@@ -696,18 +734,35 @@ function Felted() {
               onResume={() => setPaused(false)}
               onMenu={() => setModal("menu")}
               onChat={() => setModal("chat")}
-              onSeat={(seat) => {
+              onSeat={(seat, anchor) => {
                 if (seat.status === "empty") {
                   setModal("setup");
                   return;
                 }
-                setSelectedSeat(seat);
-                setModal("player");
+                openPlayer(seat, anchor);
               }}
               onInfo={() => setModal("info")}
               onFold={() => action("fold")}
               onCall={() => action(options.check ? "check" : "call")}
               onRaise={() => setModal("raise")}
+              raiseControl={
+                modal === "raise" && canAct ? (
+                  <InlineRaise
+                    key={`${playing ? hand.number : 0}:${playing ? hand.revision : demo.actor}`}
+                    state={playing ? hand : demo}
+                    holeCards={hero.holeCards}
+                    onCancel={() => setModal(null)}
+                    onSubmit={(amount) =>
+                      action(
+                        (playing ? hand.currentBetCents : demo.currentBetCents)
+                          ? "raise"
+                          : "bet",
+                        amount,
+                      )
+                    }
+                  />
+                ) : undefined
+              }
             />
           )}
           {screen !== "table" && (
@@ -730,17 +785,27 @@ function Felted() {
                 : "Settings work for this session; device storage is unavailable."}
             </Text>
           )}
-        </View>
+        </KeyboardAvoidingView>
         <Sheet
           title={titles[modal ?? ""] ?? ""}
-          visible={modal !== null}
+          visible={modal !== null && modal !== "raise" && modal !== "player"}
           onClose={() => setModal(null)}
           reducedMotion={reducedMotion}
         >
+          {modal === "settings" && (
+            <Settings preferences={preferences} onChange={persist} />
+          )}
           {modal === "menu" && (
             <>
               <Mono>{playing ? hand.tableName : "The Night Shift"}</Mono>
               <Copy>NLH · $0.10 / $0.20 · Practice chips · No rake</Copy>
+              <Button
+                label="Leave table"
+                onPress={() => {
+                  setScreen("club");
+                  setModal(null);
+                }}
+              />
               <Settings preferences={preferences} onChange={persist} />
               {playing && (
                 <>
@@ -778,13 +843,6 @@ function Felted() {
                   onPress={() => setModal("preview")}
                 />
               )}
-              <Button
-                label="Leave table"
-                onPress={() => {
-                  setScreen("club");
-                  setModal(null);
-                }}
-              />
             </>
           )}
           {modal === "preview" && (
@@ -849,19 +907,6 @@ function Felted() {
               />
             </>
           )}
-          {modal === "raise" && (
-            <RaiseSheet
-              state={playing ? hand : demo}
-              onSubmit={(amount) =>
-                action(
-                  (playing ? hand.currentBetCents : demo.currentBetCents)
-                    ? "raise"
-                    : "bet",
-                  amount,
-                )
-              }
-            />
-          )}
           {modal === "host" && (
             <HostSheet
               onCreate={(name, capacity) => startGame(capacity, 10000, name)}
@@ -906,25 +951,6 @@ function Felted() {
                   setModal(null);
                 }}
               />
-            </>
-          )}
-          {modal === "player" && selectedSeat && (
-            <>
-              <PlayerSheet
-                seat={selectedSeat}
-                equipped={preferences.equipped}
-              />
-              {selectedSeat.id !== "hero" && (
-                <Copy>
-                  Automated practice opponent · no hidden-card knowledge
-                </Copy>
-              )}
-              {selectedSeat.id === "hero" && session && (
-                <Button
-                  label="Session & hand history"
-                  onPress={() => setModal("session")}
-                />
-              )}
             </>
           )}
           {modal === "chat" && (
@@ -995,6 +1021,27 @@ function Felted() {
             </>
           )}
         </Sheet>
+        {modal === "player" && selectedSeat && (
+          <FloatingPlayerCard
+            seat={
+              playing
+                ? (pokerSeats.find((seat) => seat.id === selectedSeat.id) ??
+                  selectedSeat)
+                : selectedSeat
+            }
+            anchor={playerAnchor}
+            equipped={preferences.equipped}
+            onClose={() => setModal(null)}
+            onJoin={
+              !session && selectedSeat.id === "hero" ? joinTable : undefined
+            }
+            onHistory={
+              selectedSeat.id === "hero" && session
+                ? () => setModal("session")
+                : undefined
+            }
+          />
+        )}
       </SafeAreaView>
     </MotionProvider>
   );

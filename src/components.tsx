@@ -17,7 +17,7 @@ import {
 import Svg, { Circle, Path } from "react-native-svg";
 import { C, F } from "./theme";
 import { art, avatars } from "./assets";
-import { Entrance, usePressMotion } from "./motion";
+import { CardReveal, Entrance, usePressMotion } from "./motion";
 
 export function Mono({ style, ...props }: TextProps) {
   return <Text {...props} style={[s.mono, style]} />;
@@ -52,6 +52,10 @@ export function Icon({
     laugh:
       "M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0M7 9l2-1 2 1M14 9l2-1 2 1M7 14h10l-2 4H9z",
     lock: "M6 10h12v11H6zM8 10V6a4 4 0 0 1 8 0v4",
+    spark: "M12 2l2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z",
+    arrow: "M4 12h16M14 6l6 6-6 6",
+    book: "M12 5C8 2 4 3 2 4v15c4-2 7-1 10 1 3-2 6-3 10-1V4c-3-1-7-2-10 1v15",
+    history: "M3 10a9 9 0 1 1 1 7M3 4v6h6M12 7v5l3 2",
   };
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24">
@@ -144,7 +148,12 @@ export function Surface({
   return <View style={[s.surface, style]}>{children}</View>;
 }
 export function Wordmark() {
-  return <Mono style={s.wordmark}>FELTED</Mono>;
+  return (
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 9 }}>
+      <Icon name="spade" size={19} color={C.gold} />
+      <Mono style={s.wordmark}>FELTED</Mono>
+    </View>
+  );
 }
 export function Avatar({
   kind = "black-cat-knit",
@@ -231,6 +240,7 @@ export function PlayingCard({
   back = false,
   delay = 0,
   highlighted = false,
+  dealKey = "",
 }: {
   code?: string;
   width?: number;
@@ -239,6 +249,7 @@ export function PlayingCard({
   back?: boolean;
   delay?: number;
   highlighted?: boolean;
+  dealKey?: string | number;
 }) {
   const rank = code?.slice(0, -1) ?? "",
     suit = code?.slice(-1) ?? "s";
@@ -247,10 +258,10 @@ export function PlayingCard({
       rank
     ] ?? rank;
   return (
-    <Entrance
-      identity={`${code ?? "empty"}:${back}`}
-      delay={code || back ? delay : 0}
-      distance={code || back ? 7 : 0}
+    <CardReveal
+      identity={`${code ?? "empty"}:${back}:${dealKey}`}
+      delay={delay}
+      animate={!!code || back}
     >
       <View
         accessibilityRole="text"
@@ -267,12 +278,18 @@ export function PlayingCard({
             width,
             height: width * 1.42,
             transform: [{ rotate: `${rotation}deg` }],
-            backgroundColor: code && !back ? C.cardFace : "#101018",
+            backgroundColor:
+              code && !back ? C.cardFace : back ? "#443054" : "#17102070",
             borderColor: highlighted
               ? C.accent
               : code && !back
                 ? "#E8E1D5"
-                : "#353343",
+                : "#77588955",
+            borderStyle: code || back ? "solid" : "dashed",
+            shadowColor: highlighted ? C.accent : "#000000",
+            shadowOpacity: code || back ? 0.3 : 0,
+            shadowRadius: highlighted ? 12 : 4,
+            shadowOffset: { width: 0, height: 3 },
           },
         ]}
       >
@@ -280,7 +297,16 @@ export function PlayingCard({
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
-            <Icon name="spade" size={width * 0.5} color={C.accent} />
+            <View
+              style={{
+                position: "absolute",
+                inset: 2,
+                borderWidth: 1,
+                borderColor: "#A68DB96A",
+                borderRadius: 4,
+              }}
+            />
+            <Icon name="spade" size={width * 0.47} color={C.accent} />
           </View>
         ) : (
           code && (
@@ -288,9 +314,9 @@ export function PlayingCard({
               <Mono
                 maxFontSizeMultiplier={1.3}
                 style={{
-                  fontFamily: F.bold,
+                  fontFamily: F.strong,
                   color: suitColors[suit],
-                  fontSize: width * (rank === "T" ? 0.38 : 0.46),
+                  fontSize: width * (rank === "T" ? 0.37 : 0.43),
                   lineHeight: width * 0.51,
                 }}
               >
@@ -300,7 +326,7 @@ export function PlayingCard({
                 maxFontSizeMultiplier={1.3}
                 style={{
                   color: suitColors[suit],
-                  fontSize: width * 0.66,
+                  fontSize: width * 0.56,
                   lineHeight: width * 0.7,
                   alignSelf: "center",
                 }}
@@ -311,7 +337,7 @@ export function PlayingCard({
           )
         )}
       </View>
-    </Entrance>
+    </CardReveal>
   );
 }
 export function TimerArc({
@@ -358,17 +384,34 @@ export function Header({
   leftLabel = "Table menu",
   onLeft,
   onChat,
+  subtitle,
 }: {
   left?: string;
   leftLabel?: string;
   onLeft: () => void;
   onChat: () => void;
+  subtitle?: string;
 }) {
   return (
     <View style={s.header}>
       <IconButton name={left} label={leftLabel} onPress={onLeft} />
-      <Wordmark />
-      <IconButton name="chat" label="Chat and reactions" onPress={onChat} dot />
+      <View style={{ alignItems: "center", gap: 3 }}>
+        <Wordmark />
+        {subtitle && (
+          <Text
+            numberOfLines={1}
+            style={{
+              fontFamily: F.body,
+              fontSize: 9,
+              color: C.textSecondary,
+              maxWidth: 200,
+            }}
+          >
+            {subtitle}
+          </Text>
+        )}
+      </View>
+      <IconButton name="chat" label="Chat and reactions" onPress={onChat} />
     </View>
   );
 }
@@ -385,22 +428,23 @@ export function Tabs({
         <Pressable
           key={id}
           accessibilityRole="tab"
-          accessibilityLabel={["Play", "Club", "Collection"][i]}
+          accessibilityLabel={["Play", "Home", "Collection"][i]}
           accessibilityState={{ selected: selected === id }}
           onPress={() => onSelect(id)}
           style={[s.tab, selected === id && s.selectedTab]}
         >
           <Icon
             name={["spade", "people", "collection"][i]!}
-            color={selected === id ? C.textPrimary : C.textMuted}
+            color={selected === id ? C.accent : C.textMuted}
           />
           <Mono
             style={{
               fontSize: 11,
-              color: selected === id ? C.textPrimary : C.textSecondary,
+              fontFamily: F.ui,
+              color: selected === id ? C.accent : C.textSecondary,
             }}
           >
-            {["Play", "Club", "Collection"][i]}
+            {["Play", "Home", "Collection"][i]}
           </Mono>
         </Pressable>
       ))}
@@ -464,14 +508,14 @@ const s = StyleSheet.create({
   mono: {
     fontFamily: F.regular,
     color: C.textPrimary,
-    fontSize: 13,
+    fontSize: 12,
     fontVariant: ["tabular-nums"],
   },
-  wordmark: { fontFamily: F.medium, letterSpacing: 4, fontSize: 14 },
+  wordmark: { fontFamily: F.ui, letterSpacing: 3.5, fontSize: 12 },
   iconButton: {
     width: 44,
     height: 44,
-    borderRadius: 24,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: C.borderSubtle,
     backgroundColor: C.surface,
@@ -491,28 +535,35 @@ const s = StyleSheet.create({
     minHeight: 52,
     paddingHorizontal: 14,
     paddingVertical: 12,
-    borderRadius: 22,
+    borderRadius: 16,
     borderColor: C.borderSubtle,
     borderWidth: 1,
     backgroundColor: C.surfaceRaised,
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonText: { fontFamily: F.medium, fontSize: 15 },
-  primary: { backgroundColor: C.accent, borderColor: C.accent },
-  disabled: { opacity: 0.55 },
+  buttonText: { fontFamily: F.ui, fontSize: 15 },
+  primary: {
+    backgroundColor: C.accent,
+    borderColor: "#E8D7FF",
+    shadowColor: "#B683EF",
+    shadowOpacity: 0.17,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 5 },
+  },
+  disabled: { opacity: 0.4 },
   pressed: { opacity: 0.75 },
   surface: {
     backgroundColor: C.surface,
     borderColor: C.borderSubtle,
     borderWidth: 1,
-    borderRadius: 24,
+    borderRadius: 22,
     borderCurve: "continuous",
     padding: 18,
   },
   card: {
     borderWidth: 1,
-    borderRadius: 6,
+    borderRadius: 7,
     paddingHorizontal: 4,
     paddingTop: 2,
     justifyContent: "space-between",
@@ -529,8 +580,8 @@ const s = StyleSheet.create({
     marginHorizontal: 16,
     marginTop: 10,
     marginBottom: 8,
-    backgroundColor: "#111117",
-    borderRadius: 36,
+    backgroundColor: "#18111F",
+    borderRadius: 24,
     borderWidth: 1,
     borderColor: C.borderSubtle,
     padding: 4,
@@ -538,13 +589,13 @@ const s = StyleSheet.create({
   },
   tab: {
     flex: 1,
-    minHeight: 56,
+    minHeight: 50,
     gap: 3,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 30,
+    borderRadius: 18,
   },
-  selectedTab: { backgroundColor: "#2A2936" },
+  selectedTab: { backgroundColor: "#32213F" },
   modal: {
     flex: 1,
     justifyContent: "flex-end",
@@ -554,7 +605,7 @@ const s = StyleSheet.create({
   sheet: {
     width: "100%",
     maxWidth: 480,
-    maxHeight: "90%",
+    maxHeight: "82%",
     backgroundColor: C.surfaceRaised,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
@@ -579,8 +630,8 @@ const s = StyleSheet.create({
     gap: 12,
   },
   sheetTitle: {
-    fontSize: 24,
-    fontWeight: "600",
+    fontSize: 30,
+    fontFamily: F.display,
     color: C.textPrimary,
     flex: 1,
   },

@@ -32,3 +32,7 @@ artifacts/video/
 !artifacts/poker-review-results.json
 !artifacts/poker-build-results.json
 !artifacts/pages-review-results.json
+!artifacts/polish-*x*.png
+!artifacts/polish-review-results.json
+!artifacts/polish-interaction.webm
+!artifacts/polish-interaction.mp4

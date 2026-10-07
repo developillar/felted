@@ -1,11 +1,14 @@
 {
+  "version": "0.3.0",
   "target": "GitHub Pages production build served locally at /felted/",
   "passed": [
-    "Production Club, bundled fonts and script/favicon load under /felted/",
-    "Touch-enabled 390x844 browser completes heads-up game with conserved chips and 52 unique cards",
-    "Production reload preserves cards, stacks and completed hand history; developer tools hidden",
-    "Actual playable table and 44px action controls fit 375x667, 390x844 and 430x932 viewports",
-    "All requested production resources return success beneath /felted/; no console or runtime errors"
+    "375x667: production lobby, compressed fonts, inline raising, cancellation, floating card and 44px controls fit",
+    "390x844: production lobby, compressed fonts, inline raising, cancellation, floating card and 44px controls fit",
+    "430x932: production lobby, compressed fonts, inline raising, cancellation, floating card and 44px controls fit",
+    "Real production hand completes with conserved chips and all 52 unique cards",
+    "Reload preserves the exact cards, stacks and completed hand history; developer controls hidden",
+    "All requested resources succeed under /felted/; eight compressed fonts and no TTF requests",
+    "No console or runtime errors"
   ],
   "streets_seen": [
     "flop",
@@ -17,109 +20,248 @@
   "runtime_errors": [],
   "resource_statuses": [
     {
-      "url": "http://127.0.0.1:9061/felted/",
+      "url": "http://127.0.0.1:9062/felted/?v=0.3.0",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/_expo/static/js/web/index-ea20b5cbebad204a9d0329d31d05e363.js",
+      "url": "http://127.0.0.1:9062/felted/_expo/static/js/web/index-35b44327c42aa0087110c28915bd4de9.js",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-Regular.62f24d8fe64cf5a66cfe8c424d559b78.ttf",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Bold.846767c239cbda03401e3e7e5008447d.woff2",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-SemiBold.75ccd0d5e233bdaa53bcf94a1d8dc4ed.ttf",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Medium.5a275e1be35737894b9a738ead343da4.woff2",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-Medium.016cc4f524c6670fb565743b2db19bf4.ttf",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Regular.61e677f769446a0f2b0ab54192276a7b.woff2",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/InstrumentSerif-Italic.f0326928d0ae26ba7285ca7070d545ed.woff2",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/art/club-vignette.d776e2b3dde94c57c02f9eed5bb07516.png",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-Regular.c6b354d0f3568fcc3bb6795cf8efc477.woff2",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-Medium.ab8e5fccdca72888b4801fb21a31d74e.woff2",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-SemiBold.0deb205b06923d8a34f326444976e18a.woff2",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/_expo/static/js/web/index-ea20b5cbebad204a9d0329d31d05e363.js",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/InstrumentSerif-Regular.c6ceb2af6fe6f78fe7d23c4e78a85f10.woff2",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-Regular.62f24d8fe64cf5a66cfe8c424d559b78.ttf",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-Medium.016cc4f524c6670fb565743b2db19bf4.ttf",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-SemiBold.75ccd0d5e233bdaa53bcf94a1d8dc4ed.ttf",
+      "url": "http://127.0.0.1:9062/felted/?v=0.3.0",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
+      "url": "http://127.0.0.1:9062/felted/_expo/static/js/web/index-35b44327c42aa0087110c28915bd4de9.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/InstrumentSerif-Italic.f0326928d0ae26ba7285ca7070d545ed.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Regular.61e677f769446a0f2b0ab54192276a7b.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Medium.5a275e1be35737894b9a738ead343da4.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Bold.846767c239cbda03401e3e7e5008447d.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/InstrumentSerif-Regular.c6ceb2af6fe6f78fe7d23c4e78a85f10.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-Regular.c6b354d0f3568fcc3bb6795cf8efc477.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-SemiBold.0deb205b06923d8a34f326444976e18a.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-Medium.ab8e5fccdca72888b4801fb21a31d74e.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/?v=0.3.0",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/_expo/static/js/web/index-35b44327c42aa0087110c28915bd4de9.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Regular.61e677f769446a0f2b0ab54192276a7b.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Medium.5a275e1be35737894b9a738ead343da4.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Bold.846767c239cbda03401e3e7e5008447d.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/InstrumentSerif-Regular.c6ceb2af6fe6f78fe7d23c4e78a85f10.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/InstrumentSerif-Italic.f0326928d0ae26ba7285ca7070d545ed.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-Regular.c6b354d0f3568fcc3bb6795cf8efc477.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-Medium.ab8e5fccdca72888b4801fb21a31d74e.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-SemiBold.0deb205b06923d8a34f326444976e18a.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
       "status": 206
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
       "status": 206
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
       "status": 206
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/art/club-vignette.d776e2b3dde94c57c02f9eed5bb07516.png",
+      "url": "http://127.0.0.1:9062/felted/assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
+      "url": "http://127.0.0.1:9062/felted/?v=0.3.0",
       "status": 200
     },
     {
-      "url": "http://127.0.0.1:9061/felted/favicon.ico",
+      "url": "http://127.0.0.1:9062/felted/_expo/static/js/web/index-35b44327c42aa0087110c28915bd4de9.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/InstrumentSerif-Regular.c6ceb2af6fe6f78fe7d23c4e78a85f10.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Medium.5a275e1be35737894b9a738ead343da4.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/InstrumentSerif-Italic.f0326928d0ae26ba7285ca7070d545ed.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Bold.846767c239cbda03401e3e7e5008447d.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-Medium.ab8e5fccdca72888b4801fb21a31d74e.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-Regular.c6b354d0f3568fcc3bb6795cf8efc477.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/FeltedMono-SemiBold.0deb205b06923d8a34f326444976e18a.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/fonts/web/DMSans-Regular.61e677f769446a0f2b0ab54192276a7b.woff2",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9062/felted/assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
       "status": 200
     }
   ],
+  "web_font_bytes": 233828,
+  "browser": "Chromium mobile/touch; physical iPhone and Safari untested",
   "public_http_verified": false,
-  "public_http_limitation": "Cloud egress policy blocks developillar.github.io. Deployment success verified via the public GitHub workflow page.",
-  "deployment": {
-    "status": "success",
-    "status_verified": true,
-    "workflow_url": "https://github.com/developillar/felted/actions/runs/37550170579",
-    "branch": "gh-pages",
-    "commit": "08efab978120833d3e7d224337d3d63a5a35a230",
-    "page_url": "https://developillar.github.io/felted/",
-    "index_matches_tested_build": true,
-    "index_sha256": "7f096c2b96dab8f6d21759f4ed2e528e715ab733f46e0d21a0c9799b809e3b99",
-    "repeat_publish": "Verified no changes; no additional commit or push was made."
-  }
+  "public_http_limitation": "Cloud egress blocks developillar.github.io; deployment is verified through GitHub workflow status."
 }

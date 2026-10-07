@@ -1,5 +1,30 @@
 # Felted asset provenance
 
+The October 6 visual revision adds original vector felt, engraved chips, card
+composition, stage transitions and payout effects, rendered as real components.
+No screenshot is used as a screen background. Existing source art is preserved.
+
+DM Sans and Instrument Serif come from the official Google Fonts repository,
+under SIL OFL 1.1. Licenses are retained in `fonts/brand/`. DM Sans's official
+variable TTF was instantiated at optical size 14 and weights 400, 500 and 700
+using FontTools, for reliable static font loading on native and web. The
+instances use unique Felted Sans PostScript names, avoiding registration conflicts
+between weights on iOS. Instrument Serif Regular and Italic are the original
+upstream static TTFs.
+
+Web font files in `fonts/web/` are WOFF2 derivatives made with FontTools. Together
+the eight files total 233,828 bytes. Brand fonts retain their complete glyph sets;
+the three Ioskeley derivatives retain Latin, punctuation, currency symbols,
+arrows and common math characters, and use the internal family name Felted Mono.
+The original supplied Ioskeley TTFs and licenses remain unchanged for native use.
+Metro includes WOFF2 as an asset format; web exports include only the compressed
+font files, and iOS exports include only TTFs.
+
+Sources:
+
+- https://github.com/google/fonts/tree/main/ofl/dmsans
+- https://github.com/google/fonts/tree/main/ofl/instrumentserif
+
 Original app artwork was generated on October 6, 2026 with the image-generation
 tool using the handoff's identity and material briefs. The reference screenshots
 are design references; no screenshot crop is used as production UI or art. Text,

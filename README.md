@@ -1,9 +1,11 @@
 # Felted
 
-A composed, iOS-first poker app built with React Native, TypeScript and Expo SDK 57.
+A tactile, iOS-first poker app built with React Native, TypeScript and Expo SDK 57.
 Play complete local no-limit Texas Hold’em games against 1–8 automated opponents,
 review your hands, and collect The Reader by completing a short rules practice.
 The original design handoff is preserved in [`design/felted/`](design/felted/).
+Version 0.3 adds an editorial lobby, stitched violet felt, physical card reveals,
+traveling wagers and payouts, inline betting, and anchored player cards.
 
 ## Run
 
@@ -21,7 +23,7 @@ development client, use `npm start`.
 
 ## Phone preview on GitHub Pages
 
-Open **https://developillar.github.io/felted/** on your phone. Tap **Join table**
+Open **https://developillar.github.io/felted/?v=0.3.0** on your phone. Tap **Join table**
 to play against bots; sessions are saved in that browser. GitHub confirmed the
 first Pages deployment completed successfully for the tested build.
 
@@ -57,9 +59,12 @@ deployment was verified through its public workflow page.
 - **Practice setup** chooses 2–9 seats and $20 or $100 starting stacks. **Host a
   game** creates a named local table with automated opponents. Chips have no cash
   value; live invitations and online multiplayer are future work.
-- **Raise to** means the total committed on the current street. Enter an amount,
-  use the step controls or Minimum / ½ pot / Pot / All-in presets, then explicitly
-  submit. The engine supplies the bounds and checks every action.
+- **Raise to** means the total committed on the current street. Drag the inline
+  slider, enter an amount, or use Minimum / ½ pot / Pot / All-in presets, then
+  explicitly submit. Adjusting or canceling never places a wager. Your cards and
+  the board stay visible; the engine supplies the bounds and checks every action.
+- **Player portraits** open an anchored floating card with the live stack,
+  position and legally visible cards. Your own card links to hand history.
 - **Review hand** explains main and side pots, shows legally revealed cards,
   lists individual awards, and includes a chronological action history.
 - **Table menu → Session & hand history** shows hands played, pots won, net chips,
@@ -75,9 +80,14 @@ deployment was verified through its public workflow page.
   Conversation stays on this device. Sound, haptics, mute and Reduce Motion are
   saved preferences.
 
-Cards have short, staggered entrances, controls have restrained press feedback,
-and sheets ease into place. The system and app Reduce Motion settings suppress
-these movements. Animation never delays an accepted action or payout.
+Cards turn into place, wagers travel toward the pot, and payout chips return to
+each winning seat. Street announcements, active-seat halos and winning highlights
+follow actual engine state. The system and app Reduce Motion settings suppress
+movement. Animation never delays an accepted action or payout.
+
+The web layout uses dynamic viewport height and safe-area insets. Raising condenses
+the table when the visible area becomes short. Compressed WOFF2 fonts total 234 KB;
+native builds retain TTFs. DM Sans, Instrument Serif and Ioskeley Mono are bundled.
 
 ## Poker engine
 
@@ -92,8 +102,9 @@ already acted unless cumulative increases amount to a full raise. Short calls,
 nominal bring-in against a short big blind, uncalled returns, folded contributions,
 multiple side pots, board ties and odd-cent splits are handled explicitly. Odd
 cents go to tied winners clockwise from the first seat left of the dealer.
-The live pot includes all commitments; after settlement, the table displays the
-awarded pot while commitments are cleared and stacks include their payouts.
+The live pot includes all commitments. After settlement, a winning hero sees their
+actual award and a total-pot caption; other results show the awarded pot. Stacks
+include their payouts and commitments are cleared.
 
 Bots use their own two cards and public board/betting information. They never
 inspect other hole cards or the undealt deck. This is a single-device practice
@@ -108,6 +119,7 @@ npm test
 npm run build:web -- --max-workers 2
 bash scripts/expo.sh export --platform ios --output-dir /tmp/felted-ios-export --max-workers 2
 npm run test:ui  # development server must be running
+npm run test:polish  # phone touch controls, anchored cards and normal-motion video
 ```
 
 The 27 tests cover the original seed, layout and engine rules. Seeded 2–9 player
@@ -115,6 +127,8 @@ sessions exercise 773 complete hands and 10,452 legal actions, checking chip
 conservation and all 52 cards after every transition. Browser review covers
 complete games, all-ins, persistence, history, collection unlocks, settings,
 normal and reduced motion, and layouts at 375×667, 390×844 and 430×932.
+The visual interaction review checks continuous finger dragging, keyboard slider
+steps, safe cancellation, floating-card bounds and a 375×430 visible table area.
 
 See [`artifacts/REVIEW.md`](artifacts/REVIEW.md) for screenshots, recordings and
 results. Review evidence is checked in; scratch captures, dependencies and exports
@@ -134,9 +148,14 @@ real iPhone safe areas still need device review.
 | `src/poker/bots.ts` | Decisions using a seat's own cards and public information |
 | `src/poker/session.ts` | Session summaries, validation and serialized storage |
 | `src/poker/sheets.tsx` | Game setup, hand reviews, history and rules practice |
-| `src/motion.tsx` | Short entrances and press feedback with Reduce Motion |
+| `src/motion.tsx` | Card reveals, ambient movement and press feedback with Reduce Motion |
+| `src/visuals.tsx` | Vector felt, card composition, wager flights and payouts |
+| `src/lobby.tsx` | Home, collection gallery and Reader composition |
+| `src/raise-control.tsx` | Compact inline raising and explicit submission |
+| `src/slider.tsx`, `src/slider.web.tsx` | Native touch and web range controls |
+| `src/player-card.tsx` | Measured, anchored player cards |
 | `src/money.ts` | Shared integer-cent formatting and decimal parsing |
-| `src/screens.tsx` | Club, collection, Reader and table composition |
+| `src/screens.tsx` | Table, player seats and hero dock |
 | `src/layout.ts` | Stable seat geometry, including short table areas |
 | `src/game.ts` | Original read-only reference and scripted developer seed |
 
