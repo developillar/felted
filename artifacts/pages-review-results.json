@@ -263,5 +263,18 @@
   "web_font_bytes": 233828,
   "browser": "Chromium mobile/touch; physical iPhone and Safari untested",
   "public_http_verified": false,
-  "public_http_limitation": "Cloud egress blocks developillar.github.io; deployment is verified through GitHub workflow status."
+  "public_http_limitation": "Cloud egress blocks developillar.github.io; deployment is verified through GitHub workflow status.",
+  "verified_at": "2026-10-07T03:08:53.829980+00:00",
+  "deployment": {
+    "status": "success",
+    "status_verified": true,
+    "workflow_url": "https://github.com/developillar/felted/actions/runs/37565303808",
+    "branch": "gh-pages",
+    "commit": "6ff696406b3e0ae147ed6c3dbb3a51f6afdbb5ae",
+    "source_commit": "78966e7ae82714e268c87be4588c5c3f67d5927e",
+    "page_url": "https://developillar.github.io/felted/",
+    "phone_revision_url": "https://developillar.github.io/felted/?v=0.3.0",
+    "index_matches_tested_build": true,
+    "index_sha256": "7739dfcaca49214f597a5b2fc4d0a638e398a897e8a2256f0a64e92e77aa8d9f"
+  }
 }

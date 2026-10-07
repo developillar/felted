@@ -25,7 +25,7 @@ development client, use `npm start`.
 
 Open **https://developillar.github.io/felted/?v=0.3.0** on your phone. Tap **Join table**
 to play against bots; sessions are saved in that browser. GitHub confirmed the
-first Pages deployment completed successfully for the tested build.
+version 0.3 Pages deployment completed successfully for the tested build.
 
 The generated site is published on `gh-pages`. The repository's
 [Pages settings](https://github.com/developillar/felted/settings/pages) use
