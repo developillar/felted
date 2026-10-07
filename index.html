@@ -1,37 +1,62 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0B0911" />
+    <meta
+      name="description"
+      content="Poker, with personality. Settle into beautiful no-limit Hold’em, play your hand, and make the table your own."
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <title>Felted</title>
-    <!-- The `react-native-web` recommended style reset: https://necolas.github.io/react-native-web/docs/setup/#root-element -->
-    <style id="expo-reset">
-      /* These styles make the body full-height */
+    <style>
       html,
-      body {
+      body,
+      #root {
         height: 100%;
+        margin: 0;
+        background: #0b0911;
       }
-      /* These styles disable body scrolling if you are using <ScrollView> */
+      @supports (height: 100dvh) {
+        html,
+        body,
+        #root {
+          height: 100dvh;
+        }
+      }
       body {
         overflow: hidden;
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
       }
-      /* These styles make the root element full-height */
       #root {
         display: flex;
-        height: 100%;
         flex: 1;
       }
+      button,
+      [role="button"],
+      a {
+        touch-action: manipulation;
+      }
+      :focus-visible {
+        outline: 2px solid #e6c491;
+        outline-offset: 3px;
+      }
     </style>
-  <link rel="icon" href="/felted/favicon.ico"/></head>
-
+  <meta name="theme-color" content="#0B0911">
+<meta name="description" content="Poker, with personality. Beautiful local no-limit Hold’em, one good hand at a time.">
+<link rel="icon" href="/felted/favicon.ico"/></head>
   <body>
-    <!-- Use static rendering with Expo Router to support running without JavaScript. -->
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <!-- The root element for your Expo app. -->
+    <noscript>Enable JavaScript to take a seat at Felted.</noscript>
     <div id="root"></div>
-  <script src="/felted/_expo/static/js/web/index-ea20b5cbebad204a9d0329d31d05e363.js" defer></script>
+  <script src="/felted/_expo/static/js/web/index-35b44327c42aa0087110c28915bd4de9.js" defer></script>
 </body>
 </html>
