@@ -1,6 +1,8 @@
 node_modules/
+.cache/
 .expo/
 dist/
+dist-pages/
 *.tsbuildinfo
 .env*
 !.env.example
@@ -29,3 +31,4 @@ artifacts/video/
 !artifacts/interaction-engine.webm
 !artifacts/poker-review-results.json
 !artifacts/poker-build-results.json
+!artifacts/pages-review-results.json

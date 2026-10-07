@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
     "build:web": "bash scripts/expo.sh export --platform web",
+    "build:pages": "bash scripts/build-pages.sh",
+    "publish:pages": "bash scripts/publish-pages.sh",
     "test:ui": "python3 scripts/review.py"
   },
   "dependencies": {

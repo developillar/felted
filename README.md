@@ -19,6 +19,31 @@ headlessly on Linux while retaining Metro watching. No service credentials are
 needed. On a Mac with Xcode, use `npm run ios`; for a compatible Expo Go or
 development client, use `npm start`.
 
+## Phone preview on GitHub Pages
+
+The generated site is published on the `gh-pages` branch. In the repository's
+[Pages settings](https://github.com/developillar/felted/settings/pages), select
+**Deploy from a branch**, **gh-pages**, **/ (root)**, then **Save**. Once GitHub
+finishes deploying, open **https://developillar.github.io/felted/** on your phone.
+Tap **Join table** to play against bots; sessions are saved in that browser.
+
+To publish a new version from a checkout with GitHub push access:
+
+```bash
+npm run build:pages -- --max-workers 2
+npm run publish:pages
+```
+
+The Pages build uses `/felted` for scripts, fonts, art, audio and the favicon;
+regular development and `build:web` keep `/`. `FELTED_WEB_BASE_PATH` can override
+the Pages path for another project. `.nojekyll` preserves Expo's `_expo` files.
+Publishing replaces only the generated `gh-pages` files, preserves branch
+history, and uses a normal push so concurrent updates are rejected.
+
+The Pages build is checked locally in a touch-enabled mobile browser. Public
+deployment status and activation require access to GitHub's Pages settings or
+API; pushing the branch alone does not confirm the public site is live.
+
 ## Settle in
 
 - **Join table** deals a six-player practice game. Check, call, fold, bet and raise

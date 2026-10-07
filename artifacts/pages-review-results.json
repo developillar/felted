@@ -1,0 +1,113 @@
+{
+  "target": "GitHub Pages production build served locally at /felted/",
+  "public_site_verified": false,
+  "passed": [
+    "Production Club, bundled fonts and script/favicon load under /felted/",
+    "Touch-enabled 390x844 browser completes heads-up game with conserved chips and 52 unique cards",
+    "Production reload preserves cards, stacks and completed hand history; developer tools hidden",
+    "Actual playable table and 44px action controls fit 375x667, 390x844 and 430x932 viewports",
+    "All requested production resources return success beneath /felted/; no console or runtime errors"
+  ],
+  "streets_seen": [
+    "flop",
+    "preflop",
+    "river",
+    "showdown",
+    "turn"
+  ],
+  "runtime_errors": [],
+  "resource_statuses": [
+    {
+      "url": "http://127.0.0.1:9061/felted/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/_expo/static/js/web/index-ea20b5cbebad204a9d0329d31d05e363.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-Regular.62f24d8fe64cf5a66cfe8c424d559b78.ttf",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-SemiBold.75ccd0d5e233bdaa53bcf94a1d8dc4ed.ttf",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-Medium.016cc4f524c6670fb565743b2db19bf4.ttf",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/art/club-vignette.d776e2b3dde94c57c02f9eed5bb07516.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/_expo/static/js/web/index-ea20b5cbebad204a9d0329d31d05e363.js",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-Regular.62f24d8fe64cf5a66cfe8c424d559b78.ttf",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-Medium.016cc4f524c6670fb565743b2db19bf4.ttf",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/fonts/IoskeleyMono-SemiBold.75ccd0d5e233bdaa53bcf94a1d8dc4ed.ttf",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
+      "status": 206
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
+      "status": 206
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
+      "status": 206
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/art/club-vignette.d776e2b3dde94c57c02f9eed5bb07516.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:9061/felted/favicon.ico",
+      "status": 200
+    }
+  ]
+}
