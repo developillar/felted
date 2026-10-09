@@ -6,6 +6,7 @@ export type Preferences = {
   sound: boolean;
   haptics: boolean;
   reducedMotion: boolean;
+  simpleLayout: boolean;
 };
 export const defaults: Preferences = {
   equipped: false,
@@ -14,6 +15,7 @@ export const defaults: Preferences = {
   sound: false,
   haptics: true,
   reducedMotion: false,
+  simpleLayout: false,
 };
 const key = "felted.preferences.v1";
 export async function loadPreferences(): Promise<Preferences> {

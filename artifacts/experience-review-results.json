@@ -1,0 +1,11 @@
+{
+  "version": "0.4.0",
+  "passed": [
+    "375x667: identity persistence and cancellation, exact game preservation, setup, accessibility, guide, unlock, real payout and direct history review",
+    "390x844: identity persistence and cancellation, exact game preservation, setup, accessibility, guide, unlock, real payout and direct history review",
+    "430x932: identity persistence and cancellation, exact game preservation, setup, accessibility, guide, unlock, real payout and direct history review",
+    "No console or runtime errors; normal and reduced motion both reviewed"
+  ],
+  "errors": [],
+  "browser": "Chromium mobile/touch; physical iPhone and Safari untested"
+}

@@ -1,6 +1,6 @@
 {
   "name": "felted",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "main": "index.ts",
   "scripts": {
@@ -13,7 +13,9 @@
     "build:pages": "bash scripts/build-pages.sh",
     "publish:pages": "bash scripts/publish-pages.sh",
     "test:ui": "python3 scripts/review.py",
-    "test:polish": "python3 scripts/review-polish.py"
+    "test:polish": "python3 scripts/review-polish.py",
+    "test:experience": "python3 scripts/review-experience.py",
+    "test:pages": "python3 scripts/review-pages.py"
   },
   "dependencies": {
     "@expo/metro-runtime": "~57.0.16",

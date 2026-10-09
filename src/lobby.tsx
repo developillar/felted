@@ -25,9 +25,11 @@ import { C, F } from "./theme";
 function Masthead({
   onProfile,
   onSettings,
+  avatar,
 }: {
   onProfile: (anchor?: Anchor) => void;
   onSettings?: () => void;
+  avatar?: string;
 }) {
   const profile = useRef<View>(null);
   return (
@@ -35,7 +37,11 @@ function Masthead({
       <Wordmark />
       <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
         {onSettings && (
-          <IconButton name="menu" label="App settings" onPress={onSettings} />
+          <IconButton
+            name="settings"
+            label="App settings"
+            onPress={onSettings}
+          />
         )}
         <Pressable
           ref={profile}
@@ -48,7 +54,7 @@ function Masthead({
           }
           style={s.profile}
         >
-          <Avatar size={39} />
+          <Avatar kind={avatar} size={39} />
         </Pressable>
       </View>
     </View>
@@ -68,6 +74,7 @@ export function ClubScreen({
   handsPlayed = 0,
   tableName = "The Night Shift",
   onSettings,
+  avatar,
 }: {
   onJoin: () => void;
   onHost: () => void;
@@ -81,6 +88,7 @@ export function ClubScreen({
   handsPlayed?: number;
   tableName?: string;
   onSettings?: () => void;
+  avatar?: string;
 }) {
   const { width } = useWindowDimensions();
   return (
@@ -90,7 +98,11 @@ export function ClubScreen({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={s.content}
       >
-        <Masthead onProfile={onProfile} onSettings={onSettings} />
+        <Masthead
+          onProfile={onProfile}
+          onSettings={onSettings}
+          avatar={avatar}
+        />
         <Entrance identity="home-heading" distance={14} duration={550}>
           <View style={{ alignItems: "center", paddingTop: 20, gap: 12 }}>
             <Mono style={s.eyebrow}>POKER, WITH PERSONALITY</Mono>
@@ -463,6 +475,7 @@ export function CollectionScreen({
   onObject,
   onProfile,
   onSettings,
+  avatar,
 }: {
   earned: boolean;
   equipped: boolean;
@@ -470,6 +483,7 @@ export function CollectionScreen({
   onObject: (index: number) => void;
   onProfile: (anchor?: Anchor) => void;
   onSettings?: () => void;
+  avatar?: string;
 }) {
   return (
     <View style={{ flex: 1 }}>
@@ -478,7 +492,11 @@ export function CollectionScreen({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={s.content}
       >
-        <Masthead onProfile={onProfile} onSettings={onSettings} />
+        <Masthead
+          onProfile={onProfile}
+          onSettings={onSettings}
+          avatar={avatar}
+        />
         <Entrance identity="collection-heading" distance={16} duration={550}>
           <View style={{ paddingTop: 22, paddingBottom: 22, gap: 12 }}>
             <Mono style={s.eyebrow}>THE COLLECTION</Mono>

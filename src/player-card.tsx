@@ -28,6 +28,7 @@ export function FloatingPlayerCard({
   onClose,
   onHistory,
   onJoin,
+  onEdit,
 }: {
   seat: Seat;
   anchor: Anchor | null;
@@ -35,12 +36,13 @@ export function FloatingPlayerCard({
   onClose: () => void;
   onHistory?: () => void;
   onJoin?: () => void;
+  onEdit?: () => void;
 }) {
   const { width, height } = useWindowDimensions();
   const reduced = useReducedMotion();
   const cardWidth = Math.min(290, width - 32);
   const [cardHeight, setCardHeight] = useState(
-    seat.id === "hero" && (onHistory || onJoin) ? 280 : 218,
+    seat.id === "hero" && (onHistory || onJoin) ? 330 : 218,
   );
   const insets = useSafeAreaInsets();
   const topLimit = Math.max(16, insets.top + 8),
@@ -293,6 +295,14 @@ export function FloatingPlayerCard({
                   />
                 )}
               </>
+            )}
+            {seat.id === "hero" && onEdit && (
+              <Button
+                label="Your seat & profile"
+                onPress={onEdit}
+                small
+                style={{ minHeight: 44, paddingVertical: 8 }}
+              />
             )}
           </View>
         </Entrance>

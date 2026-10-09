@@ -1,6 +1,6 @@
 {
-  "verified_at": "2026-10-07T03:06:45.868490+00:00",
-  "version": "0.3.0",
+  "verified_at": "2026-10-09T18:16:10.395821+00:00",
+  "version": "0.4.0",
   "typecheck": "passed",
   "tests": {
     "passed": 27,
@@ -37,5 +37,13 @@
   "browser": "Chromium mobile/touch",
   "ios_device_or_simulator_tested": false,
   "safari_tested": false,
-  "tested_index_sha256": "7739dfcaca49214f597a5b2fc4d0a638e398a897e8a2256f0a64e92e77aa8d9f"
+  "tested_index_sha256": "0f9893e3447b935a2045a41a9e78a6ab0bfa52eb316af24755ac3a849551e569",
+  "experience_review": {
+    "passed_groups": 4,
+    "errors": []
+  },
+  "production_browser_review": {
+    "passed_groups": 5,
+    "errors": []
+  }
 }

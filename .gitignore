@@ -36,3 +36,7 @@ artifacts/video/
 !artifacts/polish-review-results.json
 !artifacts/polish-interaction.webm
 !artifacts/polish-interaction.mp4
+!artifacts/experience-*x*.png
+!artifacts/experience-review-results.json
+!artifacts/experience-interaction.webm
+!artifacts/experience-interaction.mp4

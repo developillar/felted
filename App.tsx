@@ -48,6 +48,14 @@ import { Anchor, FloatingPlayerCard } from "./src/player-card";
 import { InlineRaise } from "./src/raise-control";
 import { ChatSheet, Copy, HostSheet, Settings, Toggle } from "./src/sheets";
 import { C } from "./src/theme";
+import {
+  defaultProfile,
+  loadProfile,
+  Profile,
+  saveProfile,
+} from "./src/profile";
+import { PersonalScreen, ProfileEditor } from "./src/personal";
+import { Eyebrow, MenuRow, Panel, SectionHeading } from "./src/editorial";
 import { holeLabel } from "./src/poker/cards";
 import {
   act,
@@ -75,11 +83,12 @@ import {
   SessionDetails,
 } from "./src/poker/sheets";
 
-type Screen = "table" | "club" | "reader" | "collection";
+type Screen = "table" | "club" | "reader" | "collection" | "personal";
 type Modal =
   | null
   | "menu"
   | "settings"
+  | "profile"
   | "preview"
   | "raise"
   | "host"
@@ -139,6 +148,8 @@ function Felted() {
   const [fonts, fontError] = useFonts(fontAssets);
   const [preferences, setPreferences] = useState<Preferences>(defaults),
     [stored, setStored] = useState(false);
+  const [profile, setProfile] = useState<Profile>(defaultProfile);
+  const [selectedHistory, setSelectedHistory] = useState<number | null>(null);
   const [storageError, setStorageError] = useState(false),
     [sessionError, setSessionError] = useState(false);
   const [screen, setScreen] = useState<Screen>(initialScreen),
@@ -218,6 +229,13 @@ function Felted() {
   useEffect(() => {
     let mounted = true;
     Promise.all([
+      loadProfile()
+        .then((value) => {
+          if (mounted) setProfile(value);
+        })
+        .catch(() => {
+          if (mounted) setStorageError(true);
+        }),
       loadPreferences()
         .then((value) => {
           if (mounted) setPreferences(value);
@@ -253,6 +271,34 @@ function Felted() {
       mounted = false;
     };
   }, []);
+  useEffect(() => {
+    if (!stored) return;
+    const current = sessionRef.current;
+    const currentHero = current?.hand.players.find(
+      (player) => player.id === "hero",
+    );
+    if (
+      !current ||
+      !currentHero ||
+      (currentHero.name === profile.name &&
+        currentHero.avatar === profile.avatar)
+    )
+      return;
+    // Identity changes preserve every card, wager, payout and historic event.
+    const next = {
+      ...current,
+      hand: {
+        ...current.hand,
+        players: current.hand.players.map((player) =>
+          player.id === "hero"
+            ? { ...player, name: profile.name, avatar: profile.avatar }
+            : player,
+        ),
+      },
+    };
+    sessionRef.current = next;
+    setSession(next);
+  }, [stored, profile]);
   useEffect(() => {
     if (stored && session)
       saveSession(session)
@@ -426,10 +472,17 @@ function Felted() {
     tableName = "The Night Shift",
   ) {
     const next = newSession(
-      startHand(practicePlayers(players, stack), {
-        tableName,
-        random: gameRandom,
-      }),
+      startHand(
+        practicePlayers(players, stack).map((player) =>
+          player.id === "hero"
+            ? { ...player, name: profile.name, avatar: profile.avatar }
+            : player,
+        ),
+        {
+          tableName,
+          random: gameRandom,
+        },
+      ),
     );
     sessionRef.current = next;
     setSession(next);
@@ -507,6 +560,7 @@ function Felted() {
   const options = playing ? legalActions(hand, "hero") : actionOptions(demo);
   const visualHero: Seat = {
     ...visualFixture.seats.find((seat) => seat.id === "hero")!,
+    ...(mode === "play" ? profile : {}),
     stackCents: mode === "visual" ? 9860 : 10000,
   };
   const pokerSeats = hand ? asSeats(hand) : [];
@@ -552,6 +606,10 @@ function Felted() {
     setPlayerAnchor(anchor ?? null);
     setModal("player");
   }
+  function openHistory(handNumber?: number) {
+    setSelectedHistory(handNumber ?? null);
+    setModal("session");
+  }
   const callLabel =
     playing || mode === "demo"
       ? options.owed
@@ -589,6 +647,7 @@ function Felted() {
   const titles: Record<string, string> = {
     menu: "Your table",
     settings: "Your preferences",
+    profile: "Make it yours",
     preview: "Developer preview",
     raise: (playing ? hand.currentBetCents : demo.currentBetCents)
       ? "Raise to"
@@ -656,6 +715,7 @@ function Felted() {
               onLearn={() => setModal("learn")}
               onSetup={() => setModal("setup")}
               onSettings={() => setModal("settings")}
+              avatar={profile.avatar}
             />
           )}
           {screen === "collection" && (
@@ -669,6 +729,21 @@ function Felted() {
               }}
               onProfile={(anchor) => openPlayer(hero, anchor)}
               onSettings={() => setModal("settings")}
+              avatar={profile.avatar}
+            />
+          )}
+          {screen === "personal" && (
+            <PersonalScreen
+              profile={profile}
+              session={session}
+              equipped={preferences.equipped}
+              learned={preferences.learned}
+              onEdit={() => setModal("profile")}
+              onJoin={joinTable}
+              onHistory={openHistory}
+              onLearn={() => setModal("learn")}
+              onSettings={() => setModal("settings")}
+              onCollection={() => setScreen("collection")}
             />
           )}
           {screen === "reader" && (
@@ -709,7 +784,7 @@ function Felted() {
               canAct={canAct}
               muted={preferences.muted}
               reaction={reaction}
-              simple={largeText || fontScale > 1.25}
+              simple={preferences.simpleLayout || largeText || fontScale > 1.25}
               host={false}
               actorId={playing ? hand.actorId : null}
               handLabel={
@@ -792,13 +867,41 @@ function Felted() {
           onClose={() => setModal(null)}
           reducedMotion={reducedMotion}
         >
+          {modal === "profile" && (
+            <ProfileEditor
+              profile={profile}
+              onSave={(value) => {
+                setProfile(value);
+                saveProfile(value)
+                  .then(() => setStorageError(false))
+                  .catch(() => setStorageError(true));
+                setModal(null);
+                tactile("success");
+              }}
+            />
+          )}
           {modal === "settings" && (
             <Settings preferences={preferences} onChange={persist} />
           )}
           {modal === "menu" && (
             <>
-              <Mono>{playing ? hand.tableName : "The Night Shift"}</Mono>
-              <Copy>NLH · $0.10 / $0.20 · Practice chips · No rake</Copy>
+              <Panel>
+                <Eyebrow>
+                  {paused ? "TAKING A BREATHER" : "YOUR PRACTICE TABLE"}
+                </Eyebrow>
+                <SectionHeading
+                  title={playing ? hand.tableName : "The Night Shift"}
+                  detail={`No-limit Hold’em · $0.10 / $0.20${playing ? ` · ${hand.players.length} seats` : ""}`}
+                />
+                {playing && (
+                  <Copy>
+                    Hand #{hand.number} ·{" "}
+                    {hand.phase === "complete"
+                      ? "Ready for the next deal"
+                      : hand.street}
+                  </Copy>
+                )}
+              </Panel>
               <Button
                 label="Leave table"
                 onPress={() => {
@@ -806,34 +909,62 @@ function Felted() {
                   setModal(null);
                 }}
               />
-              <Settings preferences={preferences} onChange={persist} />
               {playing && (
                 <>
-                  <Button
-                    label={paused ? "Resume game" : "Pause game"}
+                  <MenuRow
+                    title={paused ? "Resume game" : "Pause game"}
+                    detail={
+                      paused
+                        ? "Back to your next decision."
+                        : "Hold your place. Take a breath."
+                    }
+                    icon="pause"
                     onPress={() => {
                       setPaused(!paused);
                       setModal(null);
                     }}
                   />
-                  <Button
-                    label="Session & hand history"
-                    onPress={() => setModal("session")}
+                  <MenuRow
+                    title="Session & hand history"
+                    detail="Your results and your latest 20 hands."
+                    icon="history"
+                    onPress={() => openHistory()}
                   />
-                  <Button
-                    label="Review current hand"
+                  <MenuRow
+                    title="Review current hand"
+                    detail="Cards, pots, and every decision."
+                    icon="spade"
                     onPress={() => setModal("info")}
                   />
-                  <Button
-                    label="New practice game"
+                  <MenuRow
+                    title="New practice game"
+                    detail="A fresh table with your choice of seats."
+                    icon="plus"
                     onPress={() => setModal("setup")}
                   />
-                  <Button
-                    label="Learn the game"
+                  <MenuRow
+                    title="Learn the game"
+                    detail="A visual guide to hands and side pots."
+                    icon="book"
                     onPress={() => setModal("learn")}
                   />
                 </>
               )}
+              <MenuRow
+                title="Your preferences"
+                detail="Sound, motion and table comfort."
+                icon="settings"
+                onPress={() => setModal("settings")}
+              />
+              <MenuRow
+                title="Your seat & profile"
+                detail="Make a little room for your personality."
+                icon="profile"
+                onPress={() => {
+                  setModal(null);
+                  setScreen("personal");
+                }}
+              />
               {mode === "demo" && (
                 <Button label="Reset hand demo" onPress={() => resetDemo()} />
               )}
@@ -909,12 +1040,15 @@ function Felted() {
           )}
           {modal === "host" && (
             <HostSheet
+              avatar={profile.avatar}
+              replacing={!!session}
               onCreate={(name, capacity) => startGame(capacity, 10000, name)}
             />
           )}
           {modal === "setup" && (
             <GameSetup
               replacing={!!session}
+              avatar={profile.avatar}
               onStart={(players, stack) => startGame(players, stack)}
             />
           )}
@@ -930,7 +1064,10 @@ function Felted() {
             />
           )}
           {modal === "session" && session && (
-            <SessionDetails session={session} />
+            <SessionDetails
+              session={session}
+              initialHandNumber={selectedHistory}
+            />
           )}
           {modal === "object" && (
             <>
@@ -1037,7 +1174,15 @@ function Felted() {
             }
             onHistory={
               selectedSeat.id === "hero" && session
-                ? () => setModal("session")
+                ? () => openHistory()
+                : undefined
+            }
+            onEdit={
+              selectedSeat.id === "hero"
+                ? () => {
+                    setModal(null);
+                    setScreen("personal");
+                  }
                 : undefined
             }
           />

@@ -1,4 +1,9 @@
-import React, { PropsWithChildren } from "react";
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useRef,
+} from "react";
 import {
   ActivityIndicator,
   Animated,
@@ -56,6 +61,10 @@ export function Icon({
     arrow: "M4 12h16M14 6l6 6-6 6",
     book: "M12 5C8 2 4 3 2 4v15c4-2 7-1 10 1 3-2 6-3 10-1V4c-3-1-7-2-10 1v15",
     history: "M3 10a9 9 0 1 1 1 7M3 4v6h6M12 7v5l3 2",
+    profile: "M8 7a4 4 0 1 0 8 0 4 4 0 0 0-8 0M3 21v-2a9 9 0 0 1 18 0v2",
+    settings:
+      "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M9 3h6l1 3 3 1 2 5-2 5-3 1-1 3H9l-1-3-3-1-2-5 2-5 3-1z",
+    pause: "M7 4h3v16H7zM14 4h3v16h-3z",
   };
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24">
@@ -420,21 +429,21 @@ export function Tabs({
   onSelect,
 }: {
   selected: string;
-  onSelect: (screen: "table" | "club" | "reader") => void;
+  onSelect: (screen: "table" | "club" | "reader" | "personal") => void;
 }) {
   return (
     <View style={s.tabs}>
-      {(["table", "club", "reader"] as const).map((id, i) => (
+      {(["club", "table", "reader", "personal"] as const).map((id, i) => (
         <Pressable
           key={id}
           accessibilityRole="tab"
-          accessibilityLabel={["Play", "Home", "Collection"][i]}
+          accessibilityLabel={["Home", "Play", "Collection", "You"][i]}
           accessibilityState={{ selected: selected === id }}
           onPress={() => onSelect(id)}
           style={[s.tab, selected === id && s.selectedTab]}
         >
           <Icon
-            name={["spade", "people", "collection"][i]!}
+            name={["people", "spade", "collection", "profile"][i]!}
             color={selected === id ? C.accent : C.textMuted}
           />
           <Mono
@@ -444,13 +453,18 @@ export function Tabs({
               color: selected === id ? C.accent : C.textSecondary,
             }}
           >
-            {["Play", "Home", "Collection"][i]}
+            {["Home", "Play", "Collection", "You"][i]}
           </Mono>
         </Pressable>
       ))}
     </View>
   );
 }
+const SheetScrollContext = createContext(() => {});
+export function useSheetScroll() {
+  return useContext(SheetScrollContext);
+}
+
 export function Sheet({
   title,
   visible,
@@ -463,6 +477,7 @@ export function Sheet({
   onClose: () => void;
   reducedMotion: boolean;
 }>) {
+  const scroll = useRef<ScrollView>(null);
   return (
     <Modal
       visible={visible}
@@ -494,10 +509,16 @@ export function Sheet({
             <IconButton name="close" label="Close sheet" onPress={onClose} />
           </View>
           <ScrollView
+            key={title}
+            ref={scroll}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={{ padding: 20, gap: 16, paddingBottom: 28 }}
           >
-            {children}
+            <SheetScrollContext.Provider
+              value={() => scroll.current?.scrollTo({ y: 0, animated: false })}
+            >
+              {children}
+            </SheetScrollContext.Provider>
           </ScrollView>
         </Entrance>
       </KeyboardAvoidingView>

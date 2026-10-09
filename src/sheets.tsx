@@ -3,6 +3,8 @@ import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Button, Collectible, Icon, Mono, Surface } from "./components";
 import { Preferences } from "./preferences";
 import { C, F } from "./theme";
+import { Choice, Eyebrow, Panel, SectionHeading } from "./editorial";
+import { TablePreview } from "./setup-preview";
 
 export function Copy({ children }: React.PropsWithChildren) {
   return <Text style={s.copy}>{children}</Text>;
@@ -11,10 +13,12 @@ export function Toggle({
   label,
   value,
   onChange,
+  detail,
 }: {
   label: string;
   value: boolean;
   onChange: (v: boolean) => void;
+  detail?: string;
 }) {
   return (
     <Pressable
@@ -25,7 +29,23 @@ export function Toggle({
       onPress={() => onChange(!value)}
       style={s.toggle}
     >
-      <Copy>{label}</Copy>
+      <View style={{ flex: 1, gap: 4 }}>
+        <Text style={{ fontFamily: F.ui, fontSize: 14, color: C.textPrimary }}>
+          {label}
+        </Text>
+        {detail && (
+          <Text
+            style={{
+              fontFamily: F.body,
+              fontSize: 11,
+              lineHeight: 17,
+              color: C.textSecondary,
+            }}
+          >
+            {detail}
+          </Text>
+        )}
+      </View>
       <View
         accessible={false}
         style={{
@@ -58,39 +78,67 @@ export function Settings({
 }) {
   return (
     <>
-      <Toggle
-        label="Mute reactions"
-        value={preferences.muted}
-        onChange={(muted) => onChange({ muted })}
+      <SectionHeading
+        title="Make room for your rhythm."
+        detail="Your preferences are saved on this device."
       />
-      <Toggle
-        label="Sound"
-        value={preferences.sound}
-        onChange={(sound) => onChange({ sound })}
-      />
-      <Toggle
-        label="Haptics"
-        value={preferences.haptics}
-        onChange={(haptics) => onChange({ haptics })}
-      />
-      <Toggle
-        label="Reduce motion"
-        value={preferences.reducedMotion}
-        onChange={(reducedMotion) => onChange({ reducedMotion })}
-      />
+      <Panel>
+        <Eyebrow>THE ATMOSPHERE</Eyebrow>
+        <Toggle
+          label="Mute reactions"
+          detail="A quieter table, without reaction overlays."
+          value={preferences.muted}
+          onChange={(muted) => onChange({ muted })}
+        />
+        <Toggle
+          label="Sound"
+          detail="Soft card, chip and winning sounds."
+          value={preferences.sound}
+          onChange={(sound) => onChange({ sound })}
+        />
+        <Toggle
+          label="Haptics"
+          detail="A little feedback on supported phones."
+          value={preferences.haptics}
+          onChange={(haptics) => onChange({ haptics })}
+        />
+      </Panel>
+      <Panel>
+        <Eyebrow>YOUR COMFORT</Eyebrow>
+        <Toggle
+          label="Reduce motion"
+          detail="Keep the experience still and steady."
+          value={preferences.reducedMotion}
+          onChange={(reducedMotion) => onChange({ reducedMotion })}
+        />
+        <Toggle
+          label="Simplified table"
+          detail="Replace small seat labels with a readable player list."
+          value={preferences.simpleLayout}
+          onChange={(simpleLayout) => onChange({ simpleLayout })}
+        />
+      </Panel>
     </>
   );
 }
 export function HostSheet({
   onCreate,
+  avatar,
+  replacing = false,
 }: {
   onCreate: (name: string, capacity: number) => void;
+  avatar?: string;
+  replacing?: boolean;
 }) {
   const [name, setName] = useState("The Night Shift"),
     [capacity, setCapacity] = useState(6);
   return (
     <>
-      <Copy>Make the table your own.</Copy>
+      <Eyebrow>A LITTLE PLACE TO CALL YOUR OWN</Eyebrow>
+      <SectionHeading
+        title="Give the evening a name."
+        detail="A personal practice table, with your favorite number of seats."
+      />
       <TextInput
         accessibilityLabel="Table name"
         value={name}
@@ -98,24 +146,43 @@ export function HostSheet({
         onChangeText={setName}
         style={s.input}
       />
-      <Mono>Seats</Mono>
+      <View style={{ flexDirection: "row", gap: 6 }}>
+        {["The Night Shift", "Sunday Slowdown"].map((preset) => (
+          <Choice
+            key={preset}
+            label={preset}
+            selected={name === preset}
+            onPress={() => setName(preset)}
+            style={{ flex: 1 }}
+          />
+        ))}
+      </View>
+      <TablePreview count={capacity} avatar={avatar} />
+      <SectionHeading
+        title="Bring a little company."
+        detail="Seats, including you"
+      />
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
         {Array.from({ length: 8 }, (_, i) => i + 2).map((n) => (
-          <Button
+          <Choice
             key={n}
             label={`${n}`}
-            small
-            primary={capacity === n}
+            selected={capacity === n}
             onPress={() => setCapacity(n)}
             style={{ minWidth: 52, flexBasis: "22%", flexGrow: 1 }}
           />
         ))}
       </View>
-      <Mono style={s.meta}>NLH · $0.10 / $0.20 · No rake</Mono>
+      <Eyebrow>NO-LIMIT HOLD’EM · $0.10 / $0.20</Eyebrow>
       <Copy>
         Play locally with automated opponents and $100 in practice chips each.
         Live invitations are still to come.
       </Copy>
+      {replacing && (
+        <Copy>
+          Creating this table replaces your saved table and its session history.
+        </Copy>
+      )}
       <Button
         label="Create table"
         primary
@@ -202,6 +269,35 @@ export function ChatSheet({
   const [text, setText] = useState("");
   return (
     <>
+      {!messages.length && (
+        <Panel style={{ alignItems: "center", paddingVertical: 24 }}>
+          <View
+            style={{
+              width: 52,
+              height: 52,
+              borderRadius: 18,
+              backgroundColor: "#3A2749",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Icon name="chat" color={C.accent} size={26} />
+          </View>
+          <SectionHeading title="A little warmth at the table." />
+          <Text
+            style={{
+              fontFamily: F.body,
+              color: C.textSecondary,
+              textAlign: "center",
+              fontSize: 12,
+              lineHeight: 19,
+            }}
+          >
+            Leave yourself a note, or send a little reaction into your practice
+            game.
+          </Text>
+        </Panel>
+      )}
       {messages.map((message, i) => (
         <Surface key={i}>
           <Copy>{message}</Copy>
@@ -210,6 +306,7 @@ export function ChatSheet({
       <Copy>
         Notes stay on this device. Opponents at this table are automated.
       </Copy>
+      <Eyebrow>YOUR TABLE NOTES</Eyebrow>
       <TextInput
         accessibilityLabel="Message"
         placeholder="Say something kind…"
@@ -227,6 +324,7 @@ export function ChatSheet({
           setText("");
         }}
       />
+      <SectionHeading title="Say it with a little gesture." />
       <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
         {reactions.map((r) => (
           <Pressable
@@ -265,7 +363,7 @@ const s = StyleSheet.create({
     backgroundColor: C.surface,
   },
   toggle: {
-    minHeight: 44,
+    minHeight: 58,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",

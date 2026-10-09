@@ -4,8 +4,10 @@ A tactile, iOS-first poker app built with React Native, TypeScript and Expo SDK 
 Play complete local no-limit Texas Hold’em games against 1–8 automated opponents,
 review your hands, and collect The Reader by completing a short rules practice.
 The original design handoff is preserved in [`design/felted/`](design/felted/).
-Version 0.3 adds an editorial lobby, stitched violet felt, physical card reveals,
-traveling wagers and payouts, inline betting, and anchored player cards.
+Version 0.4 adds your own saved name and portrait, a personal session dashboard,
+live table previews, an illustrated poker guide, and richer hand reviews. The
+editorial lobby, stitched violet felt, physical reveals, traveling chips, inline
+betting and anchored player cards carry through the whole experience.
 
 ## Run
 
@@ -23,9 +25,9 @@ development client, use `npm start`.
 
 ## Phone preview on GitHub Pages
 
-Open **https://developillar.github.io/felted/?v=0.3.0** on your phone. Tap **Join table**
+Open **https://developillar.github.io/felted/?v=0.4.0** on your phone. Tap **Join table**
 to play against bots; sessions are saved in that browser. GitHub confirmed the
-version 0.3 Pages deployment completed successfully for the tested build.
+version 0.4 Pages deployment completed successfully for the tested build.
 
 The generated site is published on `gh-pages`. The repository's
 [Pages settings](https://github.com/developillar/felted/settings/pages) use
@@ -53,32 +55,46 @@ deployment was verified through its public workflow page.
 
 ## Settle in
 
+- **Home / Play / Collection / You** connect the lobby, practice table, earned
+  objects and personal seat. The table keeps its immersive layout while playing.
+- **You → Edit your profile** saves a name and one of eight original portraits.
+  A live preview shows your choice. Saving changes only your identity; every card,
+  chip and history entry stays intact. Dismissing the editor discards the draft.
+  Your personal screen shows actual session results and links to recent hands.
 - **Join table** deals a six-player practice game. Check, call, fold, bet and raise
   through preflop, flop, turn and river. The table reveals eligible opponents at
   showdown, awards the pots, and offers the next hand.
 - **Practice setup** chooses 2–9 seats and $20 or $100 starting stacks. **Host a
-  game** creates a named local table with automated opponents. Chips have no cash
+  game** creates a named local table with automated opponents. A felt preview
+  updates with the chosen seats and your portrait. Chips have no cash
   value; live invitations and online multiplayer are future work.
 - **Raise to** means the total committed on the current street. Drag the inline
   slider, enter an amount, or use Minimum / ½ pot / Pot / All-in presets, then
   explicitly submit. Adjusting or canceling never places a wager. Your cards and
   the board stay visible; the engine supplies the bounds and checks every action.
 - **Player portraits** open an anchored floating card with the live stack,
-  position and legally visible cards. Your own card links to hand history.
+  position and legally visible cards. Your own card links to history and your
+  personal seat.
 - **Review hand** explains main and side pots, shows legally revealed cards,
-  lists individual awards, and includes a chronological action history.
+  lists individual awards, shows your engine-selected best five at showdown,
+  and groups the action history by street.
 - **Table menu → Session & hand history** shows hands played, pots won, net chips,
-  and the latest 20 completed hands. Every action saves locally; return from the
+  a trend drawn from completed results, and the latest 20 completed hands.
+  Recent-hand links open the selected hand directly. Every action saves locally; return from the
   Club or reload to resume the same cards and stacks.
 - **Pause game** and leaving the table stop automated actions. Returning gives
   you a fresh two-minute practice turn. An expired turn checks if legal, otherwise
   folds. Backgrounding the app also stops automated actions.
-- **Learn the game** explains Hold’em and offers a side-pot question. Completing
+- **Learn the game** has three illustrated chapters: Basics, Hand rankings and
+  Side pots. Explore all nine rankings with physical card examples and tie-break
+  explanations, then practice splitting main and side pots. Completing
   it unlocks The Reader; equipping its crest persists and updates your seat.
   The Host and Good Company remain locked pending shared-session features.
 - **Chat and reactions** retain notes while opening and closing the sheet.
   Conversation stays on this device. Sound, haptics, mute and Reduce Motion are
-  saved preferences.
+  saved preferences. **Simplified table** replaces small seat labels with a
+  readable players-and-stacks list. Preferences are grouped by atmosphere and
+  comfort.
 
 Cards turn into place, wagers travel toward the pot, and payout chips return to
 each winning seat. Street announcements, active-seat halos and winning highlights
@@ -120,6 +136,7 @@ npm run build:web -- --max-workers 2
 bash scripts/expo.sh export --platform ios --output-dir /tmp/felted-ios-export --max-workers 2
 npm run test:ui  # development server must be running
 npm run test:polish  # phone touch controls, anchored cards and normal-motion video
+npm run test:experience  # profile, setup, guide and hand-review flows on three phones
 ```
 
 The 27 tests cover the original seed, layout and engine rules. Seeded 2–9 player
@@ -127,8 +144,17 @@ sessions exercise 773 complete hands and 10,452 legal actions, checking chip
 conservation and all 52 cards after every transition. Browser review covers
 complete games, all-ins, persistence, history, collection unlocks, settings,
 normal and reduced motion, and layouts at 375×667, 390×844 and 430×932.
-The visual interaction review checks continuous finger dragging, keyboard slider
+The 27 browser review groups include continuous finger dragging, keyboard slider
 steps, safe cancellation, floating-card bounds and a 375×430 visible table area.
+They also verify profile persistence, exact game preservation during identity
+changes, cancellation, simplified layouts, all guide chapters and direct hand
+review links.
+
+To review the production export, serve `dist-pages` beneath `/felted/` and run
+`npm run test:pages`. Its default URL is `http://127.0.0.1:9062/felted`;
+`FELTED_REVIEW_URL` can override it. This separately checks production resource
+paths, fonts, mobile controls, real gameplay, reload persistence and hidden
+developer controls.
 
 See [`artifacts/REVIEW.md`](artifacts/REVIEW.md) for screenshots, recordings and
 results. Review evidence is checked in; scratch captures, dependencies and exports
@@ -141,23 +167,27 @@ real iPhone safe areas still need device review.
 
 ## Code map
 
-| Location | Responsibility |
-| --- | --- |
-| `src/poker/engine.ts` | Dealing, betting, street transitions, pots and payouts |
-| `src/poker/cards.ts` | Deck generation and best-five hand evaluation |
-| `src/poker/bots.ts` | Decisions using a seat's own cards and public information |
-| `src/poker/session.ts` | Session summaries, validation and serialized storage |
-| `src/poker/sheets.tsx` | Game setup, hand reviews, history and rules practice |
-| `src/motion.tsx` | Card reveals, ambient movement and press feedback with Reduce Motion |
-| `src/visuals.tsx` | Vector felt, card composition, wager flights and payouts |
-| `src/lobby.tsx` | Home, collection gallery and Reader composition |
-| `src/raise-control.tsx` | Compact inline raising and explicit submission |
-| `src/slider.tsx`, `src/slider.web.tsx` | Native touch and web range controls |
-| `src/player-card.tsx` | Measured, anchored player cards |
-| `src/money.ts` | Shared integer-cent formatting and decimal parsing |
-| `src/screens.tsx` | Table, player seats and hero dock |
-| `src/layout.ts` | Stable seat geometry, including short table areas |
-| `src/game.ts` | Original read-only reference and scripted developer seed |
+| Location                                     | Responsibility                                                       |
+| -------------------------------------------- | -------------------------------------------------------------------- |
+| `src/poker/engine.ts`                        | Dealing, betting, street transitions, pots and payouts               |
+| `src/poker/cards.ts`                         | Deck generation and best-five hand evaluation                        |
+| `src/poker/bots.ts`                          | Decisions using a seat's own cards and public information            |
+| `src/poker/session.ts`                       | Session summaries, validation and serialized storage                 |
+| `src/poker/sheets.tsx`                       | Game setup, best-five reviews and street-grouped history             |
+| `src/poker/academy.tsx`                      | Illustrated basics, hand rankings and side-pot practice              |
+| `src/poker/session-chart.tsx`                | Trend from actual completed-hand results                             |
+| `src/profile.ts`, `src/personal.tsx`         | Saved identity, profile editor and personal seat                     |
+| `src/editorial.tsx`, `src/setup-preview.tsx` | Shared panels and live table preview                                 |
+| `src/motion.tsx`                             | Card reveals, ambient movement and press feedback with Reduce Motion |
+| `src/visuals.tsx`                            | Vector felt, card composition, wager flights and payouts             |
+| `src/lobby.tsx`                              | Home, collection gallery and Reader composition                      |
+| `src/raise-control.tsx`                      | Compact inline raising and explicit submission                       |
+| `src/slider.tsx`, `src/slider.web.tsx`       | Native touch and web range controls                                  |
+| `src/player-card.tsx`                        | Measured, anchored player cards                                      |
+| `src/money.ts`                               | Shared integer-cent formatting and decimal parsing                   |
+| `src/screens.tsx`                            | Table, player seats and hero dock                                    |
+| `src/layout.ts`                              | Stable seat geometry, including short table areas                    |
+| `src/game.ts`                                | Original read-only reference and scripted developer seed             |
 
 Developer preview preserves the static $14.90 reference and original action seed
 as separate visual comparison tools. They never supply state to the poker engine.
