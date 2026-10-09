@@ -49,9 +49,8 @@ history, and uses a normal push so concurrent updates are rejected.
 The production build was checked in a touch-enabled mobile browser: complete
 gameplay, reload persistence, asset paths, and controls at 375×667, 390×844 and
 430×932. See [`artifacts/pages-review-results.json`](artifacts/pages-review-results.json)
-for build checks and the confirmed GitHub deployment. Direct requests to the
-public site are blocked by this cloud's network policy; GitHub's successful
-deployment was verified through its public workflow page.
+for build checks and the confirmed GitHub deployment. The public site is checked
+against the exact tested export after GitHub reports deployment success.
 
 ## Settle in
 

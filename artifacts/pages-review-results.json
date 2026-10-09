@@ -262,6 +262,119 @@
   "browser": "Chromium mobile/touch; physical iPhone and Safari untested",
   "verified_at": "2026-10-09T18:15:42.177999+00:00",
   "deployment": {
-    "status": "pending"
+    "status": "success",
+    "status_verified": true,
+    "workflow_url": "https://github.com/developillar/felted/actions/runs/37972119444",
+    "branch": "gh-pages",
+    "commit": "4ee1b0562ddf2fd347d5715330922d2dad208664",
+    "source_commit": "38658ffc142d29fa7ea87f47ae51aafb5deba198",
+    "page_url": "https://developillar.github.io/felted/",
+    "phone_revision_url": "https://developillar.github.io/felted/?v=0.4.0",
+    "index_matches_tested_build": true,
+    "index_sha256": "0f9893e3447b935a2045a41a9e78a6ab0bfa52eb316af24755ac3a849551e569",
+    "all_19_public_files_match_tested_build": true,
+    "verified_at": "2026-10-09T18:20:00.112386+00:00"
+  },
+  "public_http_verified": true,
+  "public_file_integrity": [
+    {
+      "path": "favicon.ico",
+      "status": 200,
+      "sha256": "764b2a6c4b01368713b783abcb536358618327000f1b602dbe1f9636fea40625"
+    },
+    {
+      "path": "metadata.json",
+      "status": 200,
+      "sha256": "aa5f19cc84d41c0f8c70ececb2bc82e863227ea1e121632aca879eb616056991"
+    },
+    {
+      "path": "index.html",
+      "status": 200,
+      "sha256": "0f9893e3447b935a2045a41a9e78a6ab0bfa52eb316af24755ac3a849551e569"
+    },
+    {
+      "path": "_expo/static/js/web/index-0810de2a4c2d6a3af490179b47dfe2bf.js",
+      "status": 200,
+      "sha256": "68afb32ea805eebc527bd70e77832b78a6133d59d5533716437d187f424ec642"
+    },
+    {
+      "path": "assets/assets/art/reader-scene.8077c1072aa99232b73b36631adc8387.png",
+      "status": 200,
+      "sha256": "152daf3fba282269c46838bf5da00fef5fedeae0bb29e91d062bbd74e65f4c9c"
+    },
+    {
+      "path": "assets/assets/art/club-vignette.d776e2b3dde94c57c02f9eed5bb07516.png",
+      "status": 200,
+      "sha256": "30d8b1e644f510f54e8ba6dd6033d829ad5d72d1000a577062d1f52d6bc6dc00"
+    },
+    {
+      "path": "assets/assets/art/avatars.469e021738fdd6f330f8b42ce5d094d6.png",
+      "status": 200,
+      "sha256": "4d37b8735cbce35f006e851a8697ab65a65522143cac7e8c5c24a6847d0914e8"
+    },
+    {
+      "path": "assets/assets/art/collectibles.0d6bd02d330529145e26154f017492d3.png",
+      "status": 200,
+      "sha256": "bb85a74e0c2823acc455a76300e16ed9e0b4359364795de31bff141b97fe0baa"
+    },
+    {
+      "path": "assets/assets/audio/card.9a5d13ab84d6d44ed6d26881f5934cdf.wav",
+      "status": 200,
+      "sha256": "2e11938fc0bbb4542520b194ad4c6c94bc7e6a4c1bfb69d940a51ba71da67b13"
+    },
+    {
+      "path": "assets/assets/audio/chip.4595365bc731237887d8a60afa14e1a2.wav",
+      "status": 200,
+      "sha256": "ee9ca1d8be29a7386ac4ab13dd22d1d85b762c428d2f0d8ffacf060b9d2408ad"
+    },
+    {
+      "path": "assets/assets/audio/success.a0231784eb1c034c687046daf687e5df.wav",
+      "status": 200,
+      "sha256": "04bfb03d904f2c2987e561631b756f9a1f3a4777bc06af0a7f17d0257a4bcfa5"
+    },
+    {
+      "path": "assets/assets/fonts/web/FeltedMono-SemiBold.0deb205b06923d8a34f326444976e18a.woff2",
+      "status": 200,
+      "sha256": "22170a17cced104186bac6e36e314e2d0fb5fd8b30608eb845ab4b10e0742aea"
+    },
+    {
+      "path": "assets/assets/fonts/web/DMSans-Medium.5a275e1be35737894b9a738ead343da4.woff2",
+      "status": 200,
+      "sha256": "38b21741a3caba024c9372904d6d56490cffaec050ed3ba83dd0ec332c09f344"
+    },
+    {
+      "path": "assets/assets/fonts/web/FeltedMono-Regular.c6b354d0f3568fcc3bb6795cf8efc477.woff2",
+      "status": 200,
+      "sha256": "f234bdae26ca40d2c4ec7e93d2e117205ef340f07beffb769bb52d45e8b40807"
+    },
+    {
+      "path": "assets/assets/fonts/web/InstrumentSerif-Regular.c6ceb2af6fe6f78fe7d23c4e78a85f10.woff2",
+      "status": 200,
+      "sha256": "421ee9f8eb1d842be1434b19dcf5a98e5ceca5503fe8ce50e0230577d31d5366"
+    },
+    {
+      "path": "assets/assets/fonts/web/DMSans-Bold.846767c239cbda03401e3e7e5008447d.woff2",
+      "status": 200,
+      "sha256": "df86c4dd121cea3272b5e697ddbdf7016a8f14a6cf5f1ea82665e2a2b52ada20"
+    },
+    {
+      "path": "assets/assets/fonts/web/FeltedMono-Medium.ab8e5fccdca72888b4801fb21a31d74e.woff2",
+      "status": 200,
+      "sha256": "3754f221033c6c27aab18eee720fd612966b94d9652f8663b270926ff1ddb1ec"
+    },
+    {
+      "path": "assets/assets/fonts/web/InstrumentSerif-Italic.f0326928d0ae26ba7285ca7070d545ed.woff2",
+      "status": 200,
+      "sha256": "28afc7e4473977d2c8cfb9e2ef84502299e0ab755926c2ed3931c9f3043d2719"
+    },
+    {
+      "path": "assets/assets/fonts/web/DMSans-Regular.61e677f769446a0f2b0ab54192276a7b.woff2",
+      "status": 200,
+      "sha256": "061876a6326d9b3e998fed4e9d5db9ce03d3f46800de5381434d0273f18bf6ef"
+    }
+  ],
+  "public_browser_review": {
+    "completed": false,
+    "limitation": "Chromium does not trust the cloud HTTPS inspection certificate (ERR_CERT_AUTHORITY_INVALID). TLS verification was kept enabled. Secure HTTPS file verification and local production mobile browser checks passed."
   }
 }

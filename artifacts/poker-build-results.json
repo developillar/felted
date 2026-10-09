@@ -45,5 +45,9 @@
   "production_browser_review": {
     "passed_groups": 5,
     "errors": []
+  },
+  "public_pages_file_integrity": {
+    "passed_files": 19,
+    "all_match_tested_export": true
   }
 }
